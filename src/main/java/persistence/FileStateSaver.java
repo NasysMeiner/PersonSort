@@ -1,40 +1,60 @@
 package persistence;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 public class FileStateSaver implements StateSaver {
+    private final File folder;
 
     private final String path = "src/main/java/states";
 
-    @Override
-    public void saveState(List<Integer> data) {
-        File file = new File(path);
+    public FileStateSaver() {
+        folder = new File(path);
+    }
 
-        if(!file.exists())
-            file.mkdirs();
+    @Override
+    public boolean saveState(List<Integer> data) {
+        if(!folder.exists()) {
+            if(!folder.mkdirs()) {
+                System.out.println("Error create directory!");
+                return false;
+            }
+        }
 
         LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH-mm-ss");
+        String fileName = "/" + now.format(formatter) + ".txt";
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy-HH:mm:ss");
-        String formatted = now.format(formatter);
-        
-        System.out.println(formatted+".txt");
+        File file = new File(folder, fileName);
 
+        try {
+            file.createNewFile();
+
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(data.toString());
+            }
+        } catch(IOException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean isStateExists() {
-        File file = new File(path);
-
-        if(!file.exists())
+        if(!folder.exists())
             return false;
 
-        File[] files = file.listFiles();
+        File[] files = folder.listFiles();
         
+        if(files.length == 0)
+            return false;
 
         Arrays.stream(files).forEach(f -> System.out.println(f.getName()));
 
@@ -42,8 +62,11 @@ public class FileStateSaver implements StateSaver {
     }
 
     @Override
-    public String[] getAllStateExists() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public File[] getAllStateExists() {
+        if(!isStateExists())
+            return null;
+
+        return folder.listFiles();
     }
     
 }
