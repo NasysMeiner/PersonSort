@@ -8,6 +8,7 @@ public class Main {
                 .build();
 
         System.out.println(igor);
+        DataBase database = new DataBase();
         
     }
 }
