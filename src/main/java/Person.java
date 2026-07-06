@@ -22,6 +22,11 @@ public class Person implements Comparable<Person>{
         return password;
     }
     @Override
+    public String toString(){
+        return "name: " + this.name + ", mail: " + this.mail;
+    }
+
+    @Override
     public int compareTo(Person o) {
         return 0;
     }
