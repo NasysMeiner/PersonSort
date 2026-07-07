@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+import java.util.Arrays;
 import persistence.StateSaver;
 
 public class FileDataPersister implements DataPersister {
@@ -11,7 +13,10 @@ public class FileDataPersister implements DataPersister {
 
     @Override
     public String[] getAllStateExists() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        File[] allFiles = saver.getAllStateExists();
+        String[] allFileNames = Arrays.stream(allFiles).map(file -> file.getName()).toArray(String[]::new);
+        
+        return allFileNames;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class FileStateSaver implements StateSaver {
         if(!folder.exists())
             return false;
 
-        File[] files = folder.listFiles();
+        File[] files = getAllStateExists();
         
         if(files.length == 0)
             return false;
