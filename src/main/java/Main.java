@@ -1,5 +1,7 @@
+import bootstrap.MainInitializer;
 import model.DataBase;
 import model.Person;
+import runner.MainRunner;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,5 +24,12 @@ public class Main {
             System.out.println(person);
         }
         
+        MainInitializer initializer = new MainInitializer();
+
+        initializer.initialize();
+
+        MainRunner runner = new MainRunner();
+
+        runner.run();
     }
 }
