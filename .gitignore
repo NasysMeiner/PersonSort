@@ -5,3 +5,5 @@
 out/production/PersonSort/Main.class
 out/production/PersonSort/Person$Builder.class
 out/production/PersonSort/Person.class
+out/production/PersonSort/DataBase.class
+out/production/PersonSort/DataBase$PersonIterator.class

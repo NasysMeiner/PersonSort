@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -10,7 +12,7 @@ public class DataBase implements Iterable<Person>{
 
     @SuppressWarnings("unchecked")
     public DataBase(){
-//        persons = (Person[]) new Object[10];
+//        persons = (model.Person[]) new Object[10];
         persons = new Person[10];
     }
 
