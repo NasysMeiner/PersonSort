@@ -1,6 +1,8 @@
-package model;
+package main.java.model;
 
-public class Person implements Comparable<Person>{
+import java.io.Serializable;
+
+public class Person implements Comparable<Person>, Serializable {
 
     private final String name;
     private final String mail;
@@ -30,7 +32,19 @@ public class Person implements Comparable<Person>{
 
     @Override
     public int compareTo(Person o) {
-        return 0;
+        return compareByName(o) + compareByMail(o) + compareByPassword(o);
+    }
+
+    public int compareByName(Person o){
+        return o.getName().compareTo(this.getName());
+    }
+
+    public int compareByMail(Person o){
+        return o.getMail().compareTo(this.getMail());
+    }
+
+    public int compareByPassword(Person o){
+        return o.getPassword().compareTo(this.getPassword());
     }
 
     public static class Builder {

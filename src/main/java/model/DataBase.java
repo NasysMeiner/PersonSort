@@ -1,12 +1,14 @@
-package model;
+package main.java.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
+import main.java.model.Person;
 
-public class DataBase implements Iterable<Person>{
+public class DataBase implements Iterable<Person>, Serializable {
     private Person[] persons;
     private int size = 0;
 
