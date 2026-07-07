@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
@@ -11,3 +12,12 @@ out/production/PersonSort/model/DataBase$PersonIterator.class
 out/production/PersonSort/model/DataBase.class
 out/production/PersonSort/model/Person$Builder.class
 out/production/PersonSort/model/Person.class
+=======
+PersonSort.iml
+/shelf/
+/.idea/workspace.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+PersonSort.iml
+>>>>>>> main
