@@ -7,3 +7,7 @@ out/production/PersonSort/Person$Builder.class
 out/production/PersonSort/Person.class
 out/production/PersonSort/DataBase.class
 out/production/PersonSort/DataBase$PersonIterator.class
+out/production/PersonSort/model/DataBase$PersonIterator.class
+out/production/PersonSort/model/DataBase.class
+out/production/PersonSort/model/Person$Builder.class
+out/production/PersonSort/model/Person.class

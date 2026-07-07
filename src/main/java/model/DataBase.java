@@ -12,7 +12,6 @@ public class DataBase implements Iterable<Person>{
 
     @SuppressWarnings("unchecked")
     public DataBase(){
-//        persons = (model.Person[]) new Object[10];
         persons = new Person[10];
     }
 

@@ -14,8 +14,7 @@ public class Main {
                 .mail("figa@mail.ru")
                 .password("parolanet2")
                 .build();
-
-//        System.out.println(igor);
+        
         DataBase database = new DataBase();
         database.add(igor);
         database.add(slava);
