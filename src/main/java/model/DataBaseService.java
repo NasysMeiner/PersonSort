@@ -8,6 +8,7 @@ D - delete
  */
 
 import java.io.*;
+import java.nio.file.Path;
 
 public class DataBaseService {
     DataBase dataBase;
@@ -69,5 +70,18 @@ public class DataBaseService {
 
     public int getIndexByName(String name){
          return dataBase.getIndexByName(name);
+    }
+
+    public void addFromFile(){
+        try (BufferedReader reader = new BufferedReader(new FileReader("persons.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                String[] personToSave = line.split(";", 3);
+                Person newPerson = createPerson(personToSave[0], personToSave[1], personToSave[2]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

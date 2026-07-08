@@ -27,9 +27,9 @@ public class Main {
             System.out.println(person);
         }
 
-        DataBaseService.saveToFile(database);
+        service.saveToFile();
 
-        DataBase newData = DataBaseService.readFromFile();
+        DataBase newData = service.readFromFile();
         assert newData != null;
         System.out.println(newData.getSize());
         
