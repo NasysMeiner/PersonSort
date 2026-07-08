@@ -5,10 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
         MainInitializer initializer = new MainInitializer();
-
-        initializer.initialize();
-
-        MainRunner runner = new MainRunner();
+        MainRunner runner = initializer.initialize();
 
         runner.run();
     }

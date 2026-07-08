@@ -20,9 +20,10 @@ public class Person implements Comparable<Person>{
         return mail;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
+
     @Override
     public String toString(){
         return "name: " + this.name + ", mail: " + this.mail;
@@ -38,17 +39,17 @@ public class Person implements Comparable<Person>{
         private String mail;
         private String password;
 
-        public Builder name(String name) {
+        public Builder setName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder mail(String mail) {
+        public Builder setMail(String mail) {
             this.mail = mail;
             return this;
         }
 
-        public Builder password(String password) {
+        public Builder setPassword(String password) {
             this.password = password;
             return this;
         }
