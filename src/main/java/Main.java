@@ -1,12 +1,13 @@
-package main.java;
-
 import bootstrap.MainInitializer;
-import main.java.model.DataBase;
-import main.java.model.Person;
+import model.DataBase;
+import model.DataBaseService;
+import model.Person;
 import runner.MainRunner;
 
 public class Main {
     public static void main(String[] args) {
+
+        DataBaseService service = new DataBaseService();
 
         Person igor = new Person.Builder()
                 .name("Igor")
@@ -25,6 +26,12 @@ public class Main {
         for (Person person: database){
             System.out.println(person);
         }
+
+        DataBaseService.saveToFile(database);
+
+        DataBase newData = DataBaseService.readFromFile();
+        assert newData != null;
+        System.out.println(newData.getSize());
         
         MainInitializer initializer = new MainInitializer();
 

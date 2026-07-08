@@ -1,12 +1,13 @@
-package main.java.model;
+package model;
 
 import java.io.Serializable;
 
 public class Person implements Comparable<Person>, Serializable {
 
-    private final String name;
-    private final String mail;
-    private final String password;
+    private String name;
+    private String mail;
+    private String password;
+    private Long id;
 
     private Person(Builder builder) {
         this.name = builder.name;
@@ -20,6 +21,10 @@ public class Person implements Comparable<Person>, Serializable {
 
     public String getMail() {
         return mail;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     String getPassword() {
@@ -45,6 +50,22 @@ public class Person implements Comparable<Person>, Serializable {
 
     public int compareByPassword(Person o){
         return o.getPassword().compareTo(this.getPassword());
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public static class Builder {
