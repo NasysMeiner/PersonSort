@@ -32,7 +32,7 @@ public class Person implements Comparable<Person>, Serializable {
     }
     @Override
     public String toString(){
-        return "name: " + this.name + ", mail: " + this.mail;
+        return "ID: " + this.id + " name: " + this.name + ", mail: " + this.mail;
     }
 
     @Override

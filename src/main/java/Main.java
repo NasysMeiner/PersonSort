@@ -19,11 +19,10 @@ public class Main {
                 .mail("figa@mail.ru")
                 .password("parolanet2")
                 .build();
-        
-        DataBase database = new DataBase();
-        database.add(igor);
-        database.add(slava);
-        for (Person person: database){
+
+        service.addPerson(igor.getName(), igor.getMail(), "parolanet");
+        service.addPerson(slava.getName(), slava.getMail(), "parolanet2");
+        for (Person person: service.getAll()){
             System.out.println(person);
         }
 
@@ -32,6 +31,9 @@ public class Main {
         DataBase newData = service.readFromFile();
         assert newData != null;
         System.out.println(newData.getSize());
+        for (Person person: newData){
+            System.out.println(person);
+        }
         
         MainInitializer initializer = new MainInitializer();
 

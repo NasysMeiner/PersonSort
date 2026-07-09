@@ -8,7 +8,6 @@ D - delete
  */
 
 import java.io.*;
-import java.nio.file.Path;
 
 public class DataBaseService {
     DataBase dataBase;
@@ -36,7 +35,7 @@ public class DataBaseService {
     }
 
     // Create
-    public Person createPerson(String name, String email, String password){
+    public Person addPerson(String name, String email, String password){
         Person newPerson = new Person.Builder()
                 .name(name)
                 .mail(email)
@@ -51,6 +50,10 @@ public class DataBaseService {
     // Read
     public Person[] getAll(){
         return dataBase.getAll();
+    }
+
+    public Person getById(Long id){
+        return dataBase.get(dataBase.getIndexById(id));
     }
 
     // Update
@@ -78,7 +81,7 @@ public class DataBaseService {
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
                 String[] personToSave = line.split(";", 3);
-                Person newPerson = createPerson(personToSave[0], personToSave[1], personToSave[2]);
+                Person newPerson = addPerson(personToSave[0], personToSave[1], personToSave[2]);
             }
         } catch (IOException e) {
             e.printStackTrace();
