@@ -25,6 +25,9 @@ public class DataBaseService {
     }
 
     public DataBase readFromFile(){
+        if (dataBase.getSize() > 0){
+            throw new IllegalStateException("База данных имеет записи");
+        }
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("persons.dat"))) {
             this.dataBase = (DataBase) inputStream.readObject();
             return this.dataBase;
@@ -86,5 +89,12 @@ public class DataBaseService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void printData(){
+        StringBuilder sb = new StringBuilder();
+        for (Person person : dataBase){
+            sb.append(person).append("\n");
+        }
+        System.out.println(sb.toString());
     }
 }

@@ -27,13 +27,8 @@ public class Main {
         }
 
         service.saveToFile();
-
-        DataBase newData = service.readFromFile();
-        assert newData != null;
-        System.out.println(newData.getSize());
-        for (Person person: newData){
-            System.out.println(person);
-        }
+        
+        service.printData();
         
         MainInitializer initializer = new MainInitializer();
 
