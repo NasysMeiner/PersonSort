@@ -1,10 +1,9 @@
 package persistence;
 
 import java.io.File;
-import java.util.List;
 
 public interface StateSaver {
-    boolean saveState(List<Integer> data);
+    boolean saveState(byte[] data);
     boolean isStateExists();
     File[] getAllStateExists();
 }
