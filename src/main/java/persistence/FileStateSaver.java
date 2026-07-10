@@ -1,72 +1,61 @@
 package persistence;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 
 public class FileStateSaver implements StateSaver {
     private final File folder;
-
-    private final String path = "src/main/java/states";
+    private static final String PATH = "states";
 
     public FileStateSaver() {
-        folder = new File(path);
+        folder = new File(PATH);
     }
 
     @Override
-    public boolean saveState(List<Integer> data) {
-        if(!folder.exists()) {
-            if(!folder.mkdirs()) {
-                System.out.println("Error create directory!");
-                return false;
-            }
+    public boolean saveState(byte[] data) {
+        if (data == null || data.length == 0) {
+            return false;
         }
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH-mm-ss");
-        String fileName = "/" + now.format(formatter) + ".txt";
-        
-        File file = new File(folder, fileName);
-
-        try {
-            file.createNewFile();
-
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(data.toString());
-            }
-        } catch(IOException ex) {
-            System.out.println(ex.getMessage());
+        if (!folder.exists() && !folder.mkdirs()) {
             return false;
         }
 
-        return true;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy_HH-mm-ss");
+        File file = new File(folder, now.format(formatter) + ".dat");
+
+        try {
+            Files.write(file.toPath(), data);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Ошибка сохранения: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean isStateExists() {
-        if(!folder.exists())
+        if (!folder.exists()) {
             return false;
-
-        File[] files = getAllStateExists();
-        
-        if(files.length == 0)
-            return false;
-
-        Arrays.stream(files).forEach(f -> System.out.println(f.getName()));
-
-        return true;
+        }
+        File[] files = folder.listFiles();
+        return files != null && files.length > 0;
     }
 
     @Override
     public File[] getAllStateExists() {
-        if(!isStateExists())
-            return null;
-
-        return folder.listFiles();
+        if (!isStateExists()) {
+            return new File[0];
+        }
+        File[] files = folder.listFiles();
+        if (files == null) {
+            return new File[0];
+        }
+        return Arrays.stream(files)
+                .toArray(File[]::new);
     }
-    
 }
