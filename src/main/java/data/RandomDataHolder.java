@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class RandomDataHolder implements DataHolder {
     private static final String[] NAMES = {
-            "Игорь", "Анна", "Пётр", "Елена", "Максим", "Ольга", "Роман", "Светлана"
+            "Igor", "Anna", "Petr", "Elena", "Maxim", "Olga", "Roman", "Svetlana"
     };
     private static final String CHARS =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
