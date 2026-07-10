@@ -1,10 +1,13 @@
 package model;
 
-public class Person implements Comparable<Person>{
+import java.io.Serializable;
 
-    private final String name;
-    private final String mail;
-    private final String password;
+public class Person implements Comparable<Person>, Serializable {
+
+    private String name;
+    private String mail;
+    private String password;
+    private Long id;
 
     private Person(Builder builder) {
         this.name = builder.name;
@@ -20,18 +23,50 @@ public class Person implements Comparable<Person>{
         return mail;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getPassword() {
         return password;
     }
 
     @Override
     public String toString(){
-        return "name: " + this.name + ", mail: " + this.mail;
+        return "ID: " + this.id + " name: " + this.name + ", mail: " + this.mail;
     }
 
     @Override
     public int compareTo(Person o) {
-        return 0;
+        return compareByName(o) + compareByMail(o) + compareByPassword(o);
+    }
+
+    public int compareByName(Person o){
+        return o.getName().compareTo(this.getName());
+    }
+
+    public int compareByMail(Person o){
+        return o.getMail().compareTo(this.getMail());
+    }
+
+    public int compareByPassword(Person o){
+        return o.getPassword().compareTo(this.getPassword());
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public static class Builder {

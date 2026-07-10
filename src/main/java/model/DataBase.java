@@ -1,14 +1,17 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-public class DataBase implements Iterable<Person>{
+public class DataBase implements Iterable<Person>, Serializable {
     private Person[] persons;
     private int size = 0;
+    private static AtomicLong idCreator = new AtomicLong(0);
 
     @SuppressWarnings("unchecked")
     public DataBase(){
@@ -19,6 +22,7 @@ public class DataBase implements Iterable<Person>{
         if (size == persons.length){
             persons = Arrays.copyOf(persons, persons.length * 2);
         }
+        person.setId(idCreator.addAndGet(1));
         persons[size++] = person;
     }
 
@@ -46,17 +50,55 @@ public class DataBase implements Iterable<Person>{
     public int getSize(){
         return size;
     }
+
     public Person getByName(String name){
         return Arrays.stream(persons)
-                .filter(person -> person.getName().equals(name))
+                .filter(person -> person.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Человек с таким именем не найден"));
     }
     public Person getByEmail(String email){
         return Arrays.stream(persons)
-                .filter(person -> person.getMail().equals(email))
+                .filter(person -> person.getMail().equalsIgnoreCase(email))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Человек с такой почтой не найден"));
+    }
+
+    public Person getByID(Long id){
+        return Arrays.stream(persons)
+                .filter(person -> person.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Человек с таким ID не найден"));
+    }
+    public int getIndexByName(String name){
+        for (int i = 0; i < persons.length; i++) {
+            if (persons[i].getName().equalsIgnoreCase(name)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndexByEmail(String email){
+        for (int i = 0; i < persons.length; i++) {
+            if (persons[i].getMail().equalsIgnoreCase(email)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getIndexById(Long id){
+        for (int i = 0; i < persons.length; i++) {
+            if (persons[i].getId().equals(id)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public Person[] getAll(){
+        return Arrays.copyOf(persons, persons.length);
     }
 
     @Override
