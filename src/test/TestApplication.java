@@ -2,6 +2,8 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
+import test.tests.FileDataPersisterTest;
+import test.tests.RandomDataHolderTest;
 import test.tests.SorterApplicationTest;
 
 public class TestApplication {
@@ -19,6 +21,8 @@ public class TestApplication {
 
     private void initializeAllTest() {
         allTests.add(new SorterApplicationTest());
+        allTests.add(new RandomDataHolderTest());
+        allTests.add(new FileDataPersisterTest());
     }
 
     private void run() {
@@ -28,10 +32,10 @@ public class TestApplication {
             test.run();
 
             if(test.getCode() != -1) {
-                stringBuilder.append(test.getNameTest()); 
+                stringBuilder.append(test.getNameTest());
                 stringBuilder.append(": ");
                 stringBuilder.append(test.getStatus());
-                
+
                 if(test.getCode() == 0) {
                     stringBuilder.append("\n");
                     stringBuilder.append("\t");
