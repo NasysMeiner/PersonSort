@@ -90,8 +90,20 @@ public class Person implements Comparable<Person>, Serializable {
         }
 
         public Person build() {
-            if (name == null || mail == null || password == null) {
-                throw new IllegalStateException("Все поля должны быть заполнены");
+            if (name == null || name.isBlank()) {
+                throw new IllegalStateException("Имя не может быть пустым");
+            }
+            if (!name.matches("[A-Za-zА-Яа-яЁё\\s-]+")) {
+                throw new IllegalStateException("Имя содержит недопустимые символы: " + name);
+            }
+            if (mail == null || mail.isBlank()) {
+                throw new IllegalStateException("Email не может быть пустым");
+            }
+            if (!mail.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+                throw new IllegalStateException("Некорректный формат email: " + mail);
+            }
+            if (password == null || password.length() < 6) {
+                throw new IllegalStateException("Пароль должен быть не менее 6 символов");
             }
             return new Person(this);
         }
