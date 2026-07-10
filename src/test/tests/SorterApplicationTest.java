@@ -9,9 +9,4 @@ public class SorterApplicationTest extends Test {
         setFail();
         setMessage("Bad test(((");
     }
-    
-    @Override
-    public String getResult() {
-        return super.getResult();
-    }
 }

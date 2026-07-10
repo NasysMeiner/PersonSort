@@ -6,7 +6,7 @@ public abstract class Test {
 
     public Test() {
         status = -1;
-        message = "was not started";
+        message = "default was not started";
     }
 
     public abstract  void run();
@@ -16,7 +16,7 @@ public abstract class Test {
     }
 
     public String getStatus() {
-        return status <= 0 ? "Fail" : "Access";
+        return status <= 0 ? "Fail" : "Success";
     }
 
     public String getNameTest() {
@@ -35,7 +35,7 @@ public abstract class Test {
         status = 0;
     }
 
-    protected void setAccess() {
+    protected void setSuccess() {
         status = 1;
     }
 }
