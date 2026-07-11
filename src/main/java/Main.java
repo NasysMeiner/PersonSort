@@ -16,9 +16,9 @@ public class Main {
 
         Person[] people = {
                 new Person("Ivan", "qwerty", "ivan@mail.com"),
-                new Person("Anna", "abc123", "anna@mail.com"),
+        new Person("Anna", "abc123", "anna@mail.com"),
                 new Person("Petr", "zxc999", "petr@mail.com")
-        };
+    };
 
         view.showMessage("Before sorting:");
         view.showData(people);
