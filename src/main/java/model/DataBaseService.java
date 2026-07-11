@@ -8,6 +8,7 @@ D - delete
  */
 
 import java.io.*;
+import java.util.NoSuchElementException;
 
 public class DataBaseService {
     DataBase dataBase;
@@ -82,8 +83,10 @@ public class DataBaseService {
         try (BufferedReader reader = new BufferedReader(new FileReader("persons.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 String[] personToSave = line.split(";", 3);
+                if (personToSave[personToSave.length-1].split(";").length>1){
+                    throw new NoSuchElementException();
+                }
                 Person newPerson = addPerson(personToSave[0], personToSave[1], personToSave[2]);
             }
         } catch (IOException e) {

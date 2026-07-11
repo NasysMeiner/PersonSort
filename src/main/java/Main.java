@@ -12,22 +12,22 @@ public class Main {
         Person igor = new Person.Builder()
                 .name("Igor")
                 .mail("tututu@mail.ru")
-                .password("parolanet")
+                .password("paroLanet$1")
                 .build();
         Person slava = new Person.Builder()
                 .name("Slava")
                 .mail("figa@mail.ru")
-                .password("parolanet2")
+                .password("paroLanet$2")
                 .build();
 
-        service.addPerson(igor.getName(), igor.getMail(), "parolanet");
-        service.addPerson(slava.getName(), slava.getMail(), "parolanet2");
+        service.addPerson(igor.getName(), igor.getMail(), "paroLanet$1");
+        service.addPerson(slava.getName(), slava.getMail(), "paroLanet$2");
         for (Person person: service.getAll()){
             System.out.println(person);
         }
 
         service.saveToFile();
-        
+
         service.printData();
         
         MainInitializer initializer = new MainInitializer();

@@ -74,18 +74,32 @@ public class Person implements Comparable<Person>, Serializable {
         private String password;
 
         public Builder name(String name) {
-            this.name = name;
-            return this;
+            if (DataValidator.validateName(name)){
+                this.name = name;
+                return this;
+            }
+            throw new InvalidDataException("Введенное имя \"" + name + "\" состоит не только из букв");
         }
 
         public Builder mail(String mail) {
-            this.mail = mail;
-            return this;
+            if (DataValidator.validateEmail(mail)){
+                this.mail = mail;
+                return this;
+            }
+            throw new InvalidDataException("Введенная почта \"" + mail + "\" не похожа на почту");
         }
 
         public Builder password(String password) {
-            this.password = password;
-            return this;
+            if (DataValidator.validatePassword(password)){
+                this.password = password;
+                return this;
+            }
+            throw new InvalidDataException("""
+                    Введенный пароль не соответствует требованиям:\n
+                    1. Пароль должен быть длиннее 8 символов;
+                    2. В пароле должны быть строчные и прописные буквы;
+                    3. В пароле должны быть спецсимволы.
+                    """);
         }
 
         public Person build() {
