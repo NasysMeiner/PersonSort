@@ -3,6 +3,8 @@ package bootstrap;
 import application.FileDataPersister;
 import input.ConsoleUserInput;
 import input.UserInput;
+import model.DataBase;
+import persistence.FileStateLoader;
 import persistence.FileStateSaver;
 import runner.MainRunner;
 import sorter.MailSorter;
@@ -16,7 +18,9 @@ import ui.View;
 public class MainInitializer {
      public MainRunner initialize() {
           FileStateSaver stateSaver = new FileStateSaver();
-          FileDataPersister dataPersister = new FileDataPersister(stateSaver);
+          FileStateLoader stateLoader = new FileStateLoader();
+          DataBase db = new DataBase();
+          FileDataPersister dataPersister = new FileDataPersister(stateSaver, stateLoader, db);
 
           UserSorter nameSorter = new NameSorter();
           UserSorter passwordSorter = new PasswordSorter();

@@ -7,42 +7,18 @@ U - update
 D - delete
  */
 
-import java.io.*;
-
 public class DataBaseService {
     DataBase dataBase;
     public DataBaseService(){
         dataBase = new DataBase();
     }
-    public boolean saveToFile(){
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("persons.dat"))) {
-            outputStream.writeObject(this.dataBase);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public DataBase readFromFile(){
-        if (dataBase.getSize() > 0){
-            throw new IllegalStateException("База данных имеет записи");
-        }
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("persons.dat"))) {
-            this.dataBase = (DataBase) inputStream.readObject();
-            return this.dataBase;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     // Create
     public Person addPerson(String name, String email, String password){
         Person newPerson = new Person.Builder()
-                .name(name)
-                .mail(email)
-                .password(password)
+                .setName(name)
+                .setMail(email)
+                .setPassword(password)
                 .build();
         this.dataBase.add(newPerson);
 
@@ -75,18 +51,18 @@ public class DataBaseService {
     }
 
     public int getIndexByName(String name){
-         return dataBase.getIndexByName(name);
+        return dataBase.getIndexByName(name);
     }
 
     public void addFromFile(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("persons.txt"))) {
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader("persons.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
                 String[] personToSave = line.split(";", 3);
                 Person newPerson = addPerson(personToSave[0], personToSave[1], personToSave[2]);
             }
-        } catch (IOException e) {
+        } catch (java.io.IOException e) {
             e.printStackTrace();
         }
     }
