@@ -2,7 +2,7 @@ package sorter;
 
 import model.Person;
 
-public class EmailSorter implements UserSorter {
+public class MailSorter implements UserSorter {
 
     @Override
     public void sort(Person[] people) {
@@ -12,7 +12,7 @@ public class EmailSorter implements UserSorter {
 
         for (int i = 0; i < people.length - 1; i++) {
             for (int j = 0; j < people.length - 1 - i; j++) {
-                if (people[j].getEmail().compareToIgnoreCase(people[j + 1].getEmail()) > 0) {
+                if (people[j].getMail().compareToIgnoreCase(people[j + 1].getMail()) > 0) {
                     Person temp = people[j];
                     people[j] = people[j + 1];
                     people[j + 1] = temp;
