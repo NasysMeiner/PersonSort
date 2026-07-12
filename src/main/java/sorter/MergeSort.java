@@ -1,12 +1,17 @@
 package sorter;
 
+import java.util.Comparator;
 import model.Person;
 
-import java.util.Comparator;
+public class MergeSort implements UserSorter {
+    private final Comparator<Person> comparator;
 
-public class MergeSort {
+    public MergeSort(Comparator<Person> comparator) {
+        this.comparator = comparator;
+    }
 
-    public void sort(Person[] people, Comparator<Person> comparator) {
+    @Override
+    public void sort(Person[] people) {
         if (people == null || people.length < 2) {
             return;
         }

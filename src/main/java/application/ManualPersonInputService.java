@@ -1,9 +1,8 @@
 package application;
 
+import java.util.Scanner;
 import model.DataBase;
 import model.Person;
-
-import java.util.Scanner;
 
 public class ManualPersonInputService implements PersonInputService {
 
@@ -31,9 +30,9 @@ public class ManualPersonInputService implements PersonInputService {
             }
 
             Person person = new Person.Builder()
-                    .name(name)
-                    .mail(mail)
-                    .password(password)
+                    .setName(name)
+                    .setMail(mail)
+                    .setPassword(password)
                     .build();
 
             database.add(person);
