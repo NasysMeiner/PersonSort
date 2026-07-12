@@ -11,7 +11,7 @@ public class TestApplication {
         allTests = new ArrayList<>();
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         TestApplication application = new TestApplication();
         application.initializeAllTest();
         application.run();

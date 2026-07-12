@@ -40,9 +40,9 @@ public class DataBaseService {
     // Create
     public Person addPerson(String name, String email, String password){
         Person newPerson = new Person.Builder()
-                .name(name)
-                .mail(email)
-                .password(password)
+                .setName(name)
+                .setMail(email)
+                .setPassword(password)
                 .build();
         this.dataBase.add(newPerson);
 
