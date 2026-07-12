@@ -27,10 +27,9 @@ public class Person implements Comparable<Person>, Serializable {
         return id;
     }
 
-    public String getPassword() {
+    String getPassword() {
         return password;
     }
-
     @Override
     public String toString(){
         return "ID: " + this.id + " name: " + this.name + ", mail: " + this.mail;
@@ -74,36 +73,38 @@ public class Person implements Comparable<Person>, Serializable {
         private String mail;
         private String password;
 
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
+        public Builder name(String name) {
+            if (DataValidator.validateName(name)){
+                this.name = name;
+                return this;
+            }
+            throw new InvalidDataException("Введенное имя \"" + name + "\" состоит не только из букв");
         }
 
-        public Builder setMail(String mail) {
-            this.mail = mail;
-            return this;
+        public Builder mail(String mail) {
+            if (DataValidator.validateEmail(mail)){
+                this.mail = mail;
+                return this;
+            }
+            throw new InvalidDataException("Введенная почта \"" + mail + "\" не похожа на почту");
         }
 
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
+        public Builder password(String password) {
+            if (DataValidator.validatePassword(password)){
+                this.password = password;
+                return this;
+            }
+            throw new InvalidDataException("""
+                    Введенный пароль не соответствует требованиям:\n
+                    1. Пароль должен быть длиннее 8 символов;
+                    2. В пароле должны быть строчные и прописные буквы;
+                    3. В пароле должны быть спецсимволы.
+                    """);
         }
 
         public Person build() {
-            if (name == null || name.isBlank()) {
-                throw new IllegalStateException("Имя не может быть пустым");
-            }
-            if (!name.matches("[A-Za-zА-Яа-яЁё\\s-]+")) {
-                throw new IllegalStateException("Имя содержит недопустимые символы: " + name);
-            }
-            if (mail == null || mail.isBlank()) {
-                throw new IllegalStateException("Email не может быть пустым");
-            }
-            if (!mail.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
-                throw new IllegalStateException("Некорректный формат email: " + mail);
-            }
-            if (password == null || password.length() < 6) {
-                throw new IllegalStateException("Пароль должен быть не менее 6 символов");
+            if (name == null || mail == null || password == null) {
+                throw new IllegalStateException("Все поля должны быть заполнены");
             }
             return new Person(this);
         }

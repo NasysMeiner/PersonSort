@@ -98,7 +98,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
 
     public Person[] getAll(){
-        return Arrays.copyOf(persons, persons.length);
+        return Arrays.copyOf(persons, size);
     }
 
     @Override
@@ -130,6 +130,7 @@ public class DataBase implements Iterable<Person>, Serializable {
             if (cursor >= size){
                 throw new NoSuchElementException("Вышли за пределы коллекции");
             }
+
             previus = cursor;
             return persons[cursor++];
         }

@@ -7,6 +7,8 @@ U - update
 D - delete
  */
 
+import java.io.*;
+
 public class DataBaseService {
     DataBase dataBase;
     public DataBaseService(){
@@ -16,9 +18,9 @@ public class DataBaseService {
     // Create
     public Person addPerson(String name, String email, String password){
         Person newPerson = new Person.Builder()
-                .setName(name)
-                .setMail(email)
-                .setPassword(password)
+                .name(name)
+                .mail(email)
+                .password(password)
                 .build();
         this.dataBase.add(newPerson);
 
@@ -51,26 +53,14 @@ public class DataBaseService {
     }
 
     public int getIndexByName(String name){
-        return dataBase.getIndexByName(name);
+         return dataBase.getIndexByName(name);
     }
 
-    public void addFromFile(){
-        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader("persons.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                String[] personToSave = line.split(";", 3);
-                Person newPerson = addPerson(personToSave[0], personToSave[1], personToSave[2]);
-            }
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
-    }
     public void printData(){
         StringBuilder sb = new StringBuilder();
         for (Person person : dataBase){
             sb.append(person).append("\n");
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 }
