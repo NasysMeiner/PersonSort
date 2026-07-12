@@ -26,8 +26,6 @@ public class Main {
             System.out.println(person);
         }
 
-        service.saveToFile();
-
         service.printData();
         
         MainInitializer initializer = new MainInitializer();
