@@ -42,6 +42,8 @@ public class MainRunner {
     }
 
     public void run() {
+        loadStateMenu();
+
         while (!isExit) { 
             view.showMainMenu();
             String command = userInput.getInput();
@@ -49,7 +51,58 @@ public class MainRunner {
             waitForEnter();
         }
 
-        view.showMessage("End programm");
+        if(dataBaseService.getSize() > 0) {
+            String path = dataPersister.saveSystem();
+            view.showMessage("State save in: " + path + "\n\nEnd programm!");
+        }
+    }
+
+    private void loadStateMenu() {
+        boolean isWork = true;
+        while (isWork) { 
+            view.showSaveStateMenu();
+            String command = userInput.getInput();
+
+            switch (command) {
+                case "1" -> {
+                    loadFileMenu();
+                    isWork = false;
+                }
+
+                case "0" -> isWork = false;
+
+                default -> view.showMessage("Unknown command. Try Again!");
+            }
+        }   
+    }
+
+    private void loadFileMenu() {
+        String[] allFile = null;
+
+        if(dataPersister.isStateExists()) {
+            allFile = dataPersister.getAllStateExists();
+        }
+
+        int idx = 0;
+
+        if(allFile != null) {
+            for (String fileName : allFile) {
+                view.showMessage((idx + 1) + ": " + fileName);
+                idx++;
+            }
+        }
+
+        view.showMessage((idx++ + 1) + ": not load");
+
+        int command = Integer.parseInt(userInput.getInput());
+
+        if(command <= idx - 1) {
+            dataPersister.loadSystem(allFile[command - 1]);
+            view.setCurrentNameState(allFile[command - 1]);
+        }
+        else if(command > idx){
+            view.showMessage("File not found!");   
+        }
     }
 
     private void selectCommand(String command) {
@@ -61,6 +114,8 @@ public class MainRunner {
             case "3" -> view.showData(dataBaseService.getAll());
 
             case "0" -> isExit = true;
+
+            default -> isBack = true;
         }
     }
 
@@ -78,10 +133,11 @@ public class MainRunner {
 
             case "3" -> personInputService.fill();
 
-            case "0" -> isBack = true;
+            default -> isBack = true;
         }
 
-        view.showMessage("DataBase size: " + dataBaseService.getSize());
+        if(!isBack)
+            view.showMessage("DataBase size: " + dataBaseService.getSize());
     }
 
     private void sortMenu() {
@@ -106,7 +162,7 @@ public class MainRunner {
                 ShowData(sorterSelection.sortCollectionToMail(dataBaseService.getAll()));
             }
 
-            case "0" -> isBack = true;
+            default -> isBack = true;
         }
     }
 

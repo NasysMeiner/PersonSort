@@ -3,10 +3,30 @@ package ui;
 import model.Person;
 
 public class ConsoleView implements View {
+    private String currentStateName = "";
+
+    @Override
+    public void setCurrentNameState(String stateName) {
+        currentStateName = stateName;
+    }
+
+    @Override
+    public void showSaveStateMenu() {
+        StringBuilder builder = new StringBuilder("Load current state?\n");
+        builder.append("1. Yes\n");
+        builder.append("0. No\n");
+
+        showMessage(builder.toString());
+    }
 
     @Override
     public void showMainMenu() {
-        StringBuilder builder = new StringBuilder("========== Main Menu ==========\n");
+        StringBuilder builder = new StringBuilder("========== Main Menu");
+
+        if(!currentStateName.isEmpty())
+            builder.append("(").append(currentStateName).append(")");
+
+        builder.append("==========\n");
         builder.append("1. Go to 'Fill data menu'\n");
         builder.append("2. Go to 'Sort Menu'\n");
         builder.append("3. Show all data\n");

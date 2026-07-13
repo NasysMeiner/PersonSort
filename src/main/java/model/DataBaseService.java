@@ -10,8 +10,8 @@ D - delete
 public class DataBaseService {
     private DataBase dataBase;
 
-    public DataBaseService(){
-        dataBase = new DataBase();
+    public DataBaseService(DataBase dataBase){
+        this.dataBase = dataBase;
     }
 
     // Create

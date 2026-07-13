@@ -26,7 +26,7 @@ public class MainInitializer {
           DataBase db = new DataBase();
           FileDataPersister dataPersister = new FileDataPersister(stateSaver, stateLoader, db);
 
-          DataBaseService dataBaseService = new DataBaseService();
+          DataBaseService dataBaseService = new DataBaseService(db);
 
           UserSorter nameSorter = new MergeSort(Comparator.comparing(Person::getName));
           UserSorter passwordSorter = new MergeSort(Comparator.comparing(Person::getPassword));
