@@ -1,16 +1,15 @@
 package application;
 
-import model.DataBase;
-import model.Person;
-import persistence.StateLoader;
-import persistence.StateSaver;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import model.DataBase;
+import model.Person;
+import persistence.StateLoader;
+import persistence.StateSaver;
 
 public class FileDataPersister implements DataPersister {
     private final StateSaver saver;
@@ -31,17 +30,21 @@ public class FileDataPersister implements DataPersister {
     }
 
     @Override
-    public void saveSystem() {
+    public String saveSystem() {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(db);
             oos.flush();
-            boolean ok = saver.saveState(baos.toByteArray());
-            if (!ok) {
+
+            String path = saver.saveState(baos.toByteArray());
+            if (path.isEmpty()) {
                 System.out.println("Не удалось сохранить состояние");
             }
+
+            return path;
         } catch (IOException e) {
             System.out.println("Ошибка сериализации: " + e.getMessage());
+            return "";
         }
     }
 
@@ -66,5 +69,15 @@ public class FileDataPersister implements DataPersister {
     @Override
     public Person[] getData() {
         return db.getAll();
+    }
+
+    @Override
+    public String getAbsolutePath() {
+        return saver.getAbsolutePath();
+    }
+
+    @Override
+    public boolean isStateExists() {
+        return saver.isStateExists();
     }
 }

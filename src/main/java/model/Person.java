@@ -30,9 +30,10 @@ public class Person implements Comparable<Person>, Serializable {
     public String getPassword() {
         return password;
     }
+
     @Override
     public String toString(){
-        return "ID: " + this.id + " name: " + this.name + ", mail: " + this.mail;
+        return "ID-" + this.id + " Name: " + this.name + ", Password: " + this.password + ", Mail: " + this.mail;
     }
 
     @Override
@@ -74,38 +75,37 @@ public class Person implements Comparable<Person>, Serializable {
         private String password;
 
         public Builder setName(String name) {
-            if (DataValidator.validateName(name)){
-                this.name = name;
-                return this;
-            }
-            throw new InvalidDataException("Введенное имя \"" + name + "\" состоит не только из букв");
+            this.name = name;
+            return this;
         }
 
         public Builder setMail(String mail) {
-            if (DataValidator.validateEmail(mail)){
-                this.mail = mail;
-                return this;
-            }
-            throw new InvalidDataException("Введенная почта \"" + mail + "\" не похожа на почту");
+            this.mail = mail;
+            return this;
         }
 
         public Builder setPassword(String password) {
-            if (DataValidator.validatePassword(password)){
-                this.password = password;
-                return this;
-            }
-            throw new InvalidDataException("""
-                    Введенный пароль не соответствует требованиям:\n
-                    1. Пароль должен быть длиннее 8 символов;
-                    2. В пароле должны быть строчные и прописные буквы;
-                    3. В пароле должны быть спецсимволы.
-                    """);
+            this.password = password;
+            return this;
         }
 
         public Person build() {
-            if (name == null || mail == null || password == null) {
-                throw new IllegalStateException("Все поля должны быть заполнены");
+            if (name == null || name.isBlank()) {
+                throw new IllegalStateException("Имя не может быть пустым");
             }
+            if (!name.matches("[A-Za-zА-Яа-яЁё\\s-]+")) {
+                throw new IllegalStateException("Имя содержит недопустимые символы: " + name);
+            }
+            if (mail == null || mail.isBlank()) {
+                throw new IllegalStateException("Email не может быть пустым");
+            }
+            if (!mail.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+                throw new IllegalStateException("Некорректный формат email: " + mail);
+            }
+            if (password == null || password.length() < 6) {
+                throw new IllegalStateException("Пароль должен быть не менее 6 символов");
+            }
+
             return new Person(this);
         }
     }

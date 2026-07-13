@@ -3,19 +3,59 @@ package ui;
 import model.Person;
 
 public class ConsoleView implements View {
+    private String currentStateName = "";
 
     @Override
-    public void showMenu() {
-        System.out.println("========== MENU ==========");
-        System.out.println("1. Fill from file");
-        System.out.println("2. Fill randomly");
-        System.out.println("3. Fill manually");
-        System.out.println("4. Sort by name");
-        System.out.println("5. Sort by password");
-        System.out.println("6. Sort by email");
-        System.out.println("7. Show all persons");
-        System.out.println("0. Exit");
-        System.out.print("Choose option: ");
+    public void setCurrentNameState(String stateName) {
+        currentStateName = stateName;
+    }
+
+    @Override
+    public void showSaveStateMenu() {
+        StringBuilder builder = new StringBuilder("Load current state?\n");
+        builder.append("1. Yes\n");
+        builder.append("0. No\n");
+
+        showMessage(builder.toString());
+    }
+
+    @Override
+    public void showMainMenu() {
+        StringBuilder builder = new StringBuilder("========== Main Menu");
+
+        if(!currentStateName.isEmpty())
+            builder.append("(").append(currentStateName).append(")");
+
+        builder.append("==========\n");
+        builder.append("1. Go to 'Fill data menu'\n");
+        builder.append("2. Go to 'Sort Menu'\n");
+        builder.append("3. Show all data\n");
+        builder.append("0. Exit\n");
+        builder.append("\nChoose option: ");
+
+        showMessage(builder.toString());
+    }
+
+    @Override
+    public void showFillDataMenu() {
+        StringBuilder builder = new StringBuilder("========== Fill Data Menu ==========\n");
+        builder.append("1. Fill file\n");
+        builder.append("2. Fill randomly\n");
+        builder.append("3. Fill manually\n");
+        builder.append("0. back\n");
+
+        showMessage(builder.toString());
+    }
+
+    @Override
+    public void showSortMenu() {
+        StringBuilder builder = new StringBuilder("========== Sort Menu ==========\n");
+        builder.append("1. Sort by name\n");
+        builder.append("2. Sort by password\n");
+        builder.append("3. Sort by email\n");
+        builder.append("0. back\n");
+
+        showMessage(builder.toString());
     }
 
     @Override
@@ -33,5 +73,10 @@ public class ConsoleView implements View {
     @Override
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    @Override
+    public void showDataPersisterMenu() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
