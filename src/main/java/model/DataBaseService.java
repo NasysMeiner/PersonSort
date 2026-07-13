@@ -1,5 +1,7 @@
 package model;
 
+import java.util.stream.Stream;
+
 /*
 C - create
 R - read
@@ -32,8 +34,8 @@ public class DataBaseService {
     }
 
     public Person[] AddAllPerson(Person[] persons) {
-        for(Person person : persons)
-            addPerson(person);
+        Stream.of(persons)
+            .forEach(this::addPerson);
 
         return persons;
     }
