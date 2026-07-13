@@ -13,15 +13,15 @@ public class SorterSelection{
         this.mailSorter = mailSorter;
     }
 
-    public void sortCollectionToName(Person[] collection) {
-        nameSorter.sort(collection);
+    public Person[] sortCollectionToName(Person[] collection) {
+        return nameSorter.sort(collection);
     }
     
-    public void sortCollectionToPassword(Person[] collection) {
-        passwordSorter.sort(collection);
+    public Person[] sortCollectionToPassword(Person[] collection) {
+        return passwordSorter.sort(collection);
     }
 
-    public void sortCollectionToMail(Person[] collection) {
-        mailSorter.sort(collection);
+    public Person[] sortCollectionToMail(Person[] collection) {
+        return mailSorter.sort(collection);
     }
 }

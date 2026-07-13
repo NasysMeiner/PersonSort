@@ -11,13 +11,15 @@ public class MergeSort implements UserSorter {
     }
 
     @Override
-    public void sort(Person[] people) {
+    public Person[] sort(Person[] people) {
         if (people == null || people.length < 2) {
-            return;
+            return null;
         }
 
         Person[] buffer = new Person[people.length];
         mergeSort(people, buffer, 0, people.length - 1, comparator);
+
+        return people;
     }
 
     private void mergeSort(

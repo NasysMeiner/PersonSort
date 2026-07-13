@@ -47,6 +47,7 @@ public class DataBase implements Iterable<Person>, Serializable {
 
         return removedItem;
     }
+
     public int getSize(){
         return size;
     }

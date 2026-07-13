@@ -32,7 +32,7 @@ public class FileStateSaver implements StateSaver {
             Files.write(file.toPath(), data);
             return true;
         } catch (IOException e) {
-            System.out.println("Ошибка сохранения: " + e.getMessage());
+            System.out.println("Save error: " + e.getMessage());
             return false;
         }
     }

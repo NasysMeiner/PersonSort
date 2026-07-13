@@ -1,31 +1,46 @@
 package application;
 
-import java.util.Scanner;
+import input.UserInput;
 import model.DataBase;
 import model.Person;
+import ui.View;
 
 public class ManualPersonInputService implements PersonInputService {
+    private final UserInput userInput;
+    private final View view;
+    private final DataBase dataBase;
+
+    public ManualPersonInputService(UserInput userInput, View view, DataBase dataBase) {
+        this.userInput = userInput;
+        this.view = view;
+        this.dataBase = dataBase;
+    }
 
     @Override
-    public void fill(DataBase database) {
-        Scanner scanner = new Scanner(System.in);
+    public void fill() {
+        System.out.println("Manual data entry for Person");
 
-        System.out.println("Ручной ввод данных для Person.");
         while (true) {
-            String name = readField(scanner, "Введите имя (пусто для выхода): ");
+            view.showMessage("Enter your name (blank to exit): ");
+            String name = userInput.getInput();
+
             if (name.isEmpty()) {
                 break;
             }
 
-            String mail = readField(scanner, "Введите email: ");
+            view.showMessage("Enter email: ");
+            String mail = userInput.getInput();
+
             if (mail.isEmpty()) {
-                System.out.println("Email не может быть пустым. Повторите ввод.");
+                view.showMessage("Email cannot be empty. Please re-enter.");
                 continue;
             }
 
-            String password = readField(scanner, "Введите пароль: ");
+            view.showMessage("Enter your password: ");
+            String password = userInput.getInput();
+
             if (password.isEmpty()) {
-                System.out.println("Пароль не может быть пустым. Повторите ввод.");
+                view.showMessage("Password cannot be empty. Please re-enter.");
                 continue;
             }
 
@@ -35,30 +50,30 @@ public class ManualPersonInputService implements PersonInputService {
                     .setPassword(password)
                     .build();
 
-            database.add(person);
-            System.out.println("Добавлен: " + person);
+            dataBase.add(person);
 
-            if (!confirmContinue(scanner)) {
+            view.showMessage("Added: " + person);
+
+            if (!confirmContinue()) {
                 break;
             }
         }
     }
 
-    private String readField(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
-    }
-
-    private boolean confirmContinue(Scanner scanner) {
+    private boolean confirmContinue() {
         while (true) {
-            String answer = readField(scanner, "Добавить ещё одну запись? (y/n): ");
+            view.showMessage("Add another entry? (y/n): ");
+            String answer = userInput.getInput();
+
             if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
                 return true;
             }
+
             if (answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no") || answer.isEmpty()) {
                 return false;
             }
-            System.out.println("Пожалуйста, введите y или n.");
+
+            view.showMessage("Enter 'y' to continue and 'n' to exit: ");
         }
     }
 }
