@@ -6,6 +6,7 @@ import application.PersonInputService;
 import command.Command;
 import command.DataMenuCommand;
 import command.MainMenuCommand;
+import command.SearchDataMenu;
 import command.ShowDataMenuCommand;
 import command.SortMenuCommand;
 import command.StartLoadCommand;
@@ -22,6 +23,7 @@ import registry.MenuRegistry;
 import router.MenuType;
 import router.Router;
 import runner.MainRunner;
+import service.SearchService;
 import sorter.MergeSort;
 import sorter.SorterSelection;
 import sorter.UserSorter;
@@ -43,6 +45,8 @@ public class MainInitializer {
           UserSorter mailSorter = new MergeSort(Comparator.comparing(Person::getMail));
           SorterSelection sorterSelection = new SorterSelection(nameSorter, passwordSorter, mailSorter);
 
+          SearchService searchService = new SearchService(dataBaseService);
+
           View view = new ConsoleView();
           UserInput userInput = new ConsoleUserInput();
 
@@ -55,6 +59,7 @@ public class MainInitializer {
           Command dataMenuCommand = new DataMenuCommand(view, userInput, dataBaseService, randomDataHolder, personInputService);
           Command showDataMenuCommand = new ShowDataMenuCommand(view, userInput, dataBaseService);
           Command sortMenuCommand = new SortMenuCommand(view, userInput, dataBaseService, sorterSelection);
+          Command searchDataMenu = new SearchDataMenu(view, userInput, searchService, dataBaseService);
 
           MenuRegistry menuRegistry = new MenuRegistry();
           menuRegistry.registry(MenuType.START_LOAD_MENU, startLoadCommand);
@@ -62,6 +67,7 @@ public class MainInitializer {
           menuRegistry.registry(MenuType.FILL_MENU, dataMenuCommand);
           menuRegistry.registry(MenuType.SHOW_DATA_MENU, showDataMenuCommand);
           menuRegistry.registry(MenuType.SORT_MENU, sortMenuCommand);
+          menuRegistry.registry(MenuType.SEARCH_DATA_MENU, searchDataMenu);
 
           Router router = new Router(menuRegistry);
 
