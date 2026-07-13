@@ -8,6 +8,11 @@ D - delete
  */
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class DataBaseService {
     DataBase dataBase;
@@ -62,5 +67,32 @@ public class DataBaseService {
             sb.append(person).append("\n");
         }
         System.out.println(sb);
+    }
+
+    public long countOccurrences(String targetName) throws InterruptedException, ExecutionException {
+        int threads = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
+        int n = dataBase.getSize();
+        int chunk = Math.max(1, n / threads);
+        var futures = new ArrayList<Future<Long>>();
+        for (int t = 0; t < threads; t++) {
+            int start = t * chunk;
+            int end = (t == threads - 1) ? n : ( t + 1) * chunk;
+            futures.add(executor.submit(() ->{
+                long localCount = 0;
+                for (int i = start; i < end; i++) {
+                    if (dataBase.get(i).getName().equals(targetName)){
+                        localCount++;
+                    }
+                }
+                return localCount;
+            }));
+        }
+        long total = 0;
+        for (var f : futures){
+            total += f.get();
+        }
+        executor.shutdown();
+        return total;
     }
 }

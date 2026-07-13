@@ -33,6 +33,12 @@ public class DataBase implements Iterable<Person>, Serializable {
         }
         return persons[index];
     }
+    //это для итерации в стримах
+    public Person[] toArray() {
+        Person[] result = new Person[size];
+        System.arraycopy(persons, 0, result, 0, size);
+        return result;
+    }
 
     public Person delete(int index){
         if (index < 0 || index >= size){
@@ -140,4 +146,5 @@ public class DataBase implements Iterable<Person>, Serializable {
             Iterator.super.remove();
         }
     }
+
 }
