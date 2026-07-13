@@ -1,10 +1,13 @@
 package model;
 
-public class Person implements Comparable<Person>{
+import java.io.Serializable;
 
-    private final String name;
-    private final String mail;
-    private final String password;
+public class Person implements Comparable<Person>, Serializable {
+
+    private String name;
+    private String mail;
+    private String password;
+    private Long id;
 
     private Person(Builder builder) {
         this.name = builder.name;
@@ -20,17 +23,49 @@ public class Person implements Comparable<Person>{
         return mail;
     }
 
-    String getPassword() {
+    public Long getId() {
+        return id;
+    }
+
+    public String getPassword() {
         return password;
     }
     @Override
     public String toString(){
-        return "name: " + this.name + ", mail: " + this.mail;
+        return "ID: " + this.id + " name: " + this.name + ", mail: " + this.mail;
     }
 
     @Override
     public int compareTo(Person o) {
-        return 0;
+        return compareByName(o) + compareByMail(o) + compareByPassword(o);
+    }
+
+    public int compareByName(Person o){
+        return o.getName().compareTo(this.getName());
+    }
+
+    public int compareByMail(Person o){
+        return o.getMail().compareTo(this.getMail());
+    }
+
+    public int compareByPassword(Person o){
+        return o.getPassword().compareTo(this.getPassword());
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public static class Builder {
@@ -38,19 +73,33 @@ public class Person implements Comparable<Person>{
         private String mail;
         private String password;
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
+        public Builder setName(String name) {
+            if (DataValidator.validateName(name)){
+                this.name = name;
+                return this;
+            }
+            throw new InvalidDataException("Введенное имя \"" + name + "\" состоит не только из букв");
         }
 
-        public Builder mail(String mail) {
-            this.mail = mail;
-            return this;
+        public Builder setMail(String mail) {
+            if (DataValidator.validateEmail(mail)){
+                this.mail = mail;
+                return this;
+            }
+            throw new InvalidDataException("Введенная почта \"" + mail + "\" не похожа на почту");
         }
 
-        public Builder password(String password) {
-            this.password = password;
-            return this;
+        public Builder setPassword(String password) {
+            if (DataValidator.validatePassword(password)){
+                this.password = password;
+                return this;
+            }
+            throw new InvalidDataException("""
+                    Введенный пароль не соответствует требованиям:\n
+                    1. Пароль должен быть длиннее 8 символов;
+                    2. В пароле должны быть строчные и прописные буквы;
+                    3. В пароле должны быть спецсимволы.
+                    """);
         }
 
         public Person build() {
