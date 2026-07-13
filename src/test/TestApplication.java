@@ -1,16 +1,17 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import test.tests.FileDataPersisterTest;
 import test.tests.RandomDataHolderTest;
 import test.tests.SorterApplicationTest;
 
 public class TestApplication {
-    private List<Test> allTests;
+    private Test[] allTests;
+    private int testCount;
 
-    private  TestApplication() {
-        allTests = new ArrayList<>();
+    private TestApplication() {
+        allTests = new Test[10];
+        testCount = 0;
     }
 
     public static void main(String[] args) {
@@ -19,24 +20,32 @@ public class TestApplication {
         application.run();
     }
 
+    private void addTest(Test test) {
+        if (testCount == allTests.length) {
+            allTests = Arrays.copyOf(allTests, allTests.length * 2);
+        }
+        allTests[testCount++] = test;
+    }
+
     private void initializeAllTest() {
-        allTests.add(new SorterApplicationTest());
-        allTests.add(new RandomDataHolderTest());
-        allTests.add(new FileDataPersisterTest());
+        addTest(new SorterApplicationTest());
+        addTest(new RandomDataHolderTest());
+        addTest(new FileDataPersisterTest());
     }
 
     private void run() {
         StringBuilder stringBuilder = new StringBuilder("\n");
 
-        for(Test test : allTests) {
+        for (int i = 0; i < testCount; i++) {
+            Test test = allTests[i];
             test.run();
 
-            if(test.getCode() != -1) {
+            if (test.getCode() != -1) {
                 stringBuilder.append(test.getNameTest());
                 stringBuilder.append(": ");
                 stringBuilder.append(test.getStatus());
 
-                if(test.getCode() == 0) {
+                if (test.getCode() == 0) {
                     stringBuilder.append("\n");
                     stringBuilder.append("\t");
                     stringBuilder.append(test.getResult());
