@@ -17,7 +17,7 @@ public class DataValidator {
     }
 
     public static boolean validatePassword(String password){
-        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$");
+        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
 

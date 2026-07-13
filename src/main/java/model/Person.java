@@ -27,7 +27,7 @@ public class Person implements Comparable<Person>, Serializable {
         return id;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
     @Override
@@ -73,7 +73,7 @@ public class Person implements Comparable<Person>, Serializable {
         private String mail;
         private String password;
 
-        public Builder name(String name) {
+        public Builder setName(String name) {
             if (DataValidator.validateName(name)){
                 this.name = name;
                 return this;
@@ -81,7 +81,7 @@ public class Person implements Comparable<Person>, Serializable {
             throw new InvalidDataException("Введенное имя \"" + name + "\" состоит не только из букв");
         }
 
-        public Builder mail(String mail) {
+        public Builder setMail(String mail) {
             if (DataValidator.validateEmail(mail)){
                 this.mail = mail;
                 return this;
@@ -89,7 +89,7 @@ public class Person implements Comparable<Person>, Serializable {
             throw new InvalidDataException("Введенная почта \"" + mail + "\" не похожа на почту");
         }
 
-        public Builder password(String password) {
+        public Builder setPassword(String password) {
             if (DataValidator.validatePassword(password)){
                 this.password = password;
                 return this;
