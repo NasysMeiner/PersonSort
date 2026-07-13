@@ -9,6 +9,7 @@ D - delete
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,8 +17,11 @@ import java.util.concurrent.Future;
 
 public class DataBaseService {
     DataBase dataBase;
-    public DataBaseService(){
-        dataBase = new DataBase();
+    public DataBaseService(DataBase dataBase){
+        this.dataBase = dataBase;
+    }
+    public int getSize(){
+        return dataBase.getSize();
     }
 
     // Create
@@ -94,5 +98,12 @@ public class DataBaseService {
         }
         executor.shutdown();
         return total;
+    }
+
+    public Person[] AddAllPerson(Person[] data) {
+        for (Person person : data){
+            dataBase.add(person);
+        }
+        return dataBase.getAll();
     }
 }
