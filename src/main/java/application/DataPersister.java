@@ -5,9 +5,12 @@ import model.Person;
 
 public interface DataPersister {
     String[] getAllStateExists();
-    String saveSystem() throws IOException;
-    void loadSystem(String fileName) throws IOException, ClassNotFoundException;
+    String saveSystem();
+    void loadSystem(String fileName);
     Person[] getData();
     String getAbsolutePath();
     boolean isStateExists();
+
+    void appendResult(String title, Person[] data) throws IOException;
+    void appendResult(String title, Person person) throws IOException;
 }
