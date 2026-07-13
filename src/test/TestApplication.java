@@ -1,6 +1,7 @@
 package test;
 
 import java.util.Arrays;
+import test.tests.AppendResultTest;
 import test.tests.FileDataPersisterTest;
 import test.tests.RandomDataHolderTest;
 import test.tests.SorterApplicationTest;
@@ -31,6 +32,7 @@ public class TestApplication {
         addTest(new SorterApplicationTest());
         addTest(new RandomDataHolderTest());
         addTest(new FileDataPersisterTest());
+        addTest(new AppendResultTest());
     }
 
     private void run() {
