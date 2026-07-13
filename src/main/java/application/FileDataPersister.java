@@ -30,7 +30,7 @@ public class FileDataPersister implements DataPersister {
     }
 
     @Override
-    public String saveSystem() {
+    public String saveSystem() throws IOException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(db);
@@ -43,17 +43,15 @@ public class FileDataPersister implements DataPersister {
 
             return path;
         } catch (IOException e) {
-            System.out.println("Ошибка сериализации: " + e.getMessage());
-            return "";
+            throw new IOException("Error serialized");
         }
     }
 
     @Override
-    public void loadSystem(String fileName) {
+    public void loadSystem(String fileName) throws IOException, ClassNotFoundException{
         byte[] bytes = loader.loadState(fileName);
         if (bytes == null || bytes.length == 0) {
-            System.out.println("Файл пуст или не существует");
-            return;
+            throw new IOException("File is empty or does not exist!");
         }
         try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
              ObjectInputStream ois = new ObjectInputStream(bais)) {
@@ -61,8 +59,10 @@ public class FileDataPersister implements DataPersister {
             for (Person p : loaded) {
                 db.add(p);
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Ошибка десериализации: " + e.getMessage());
+        } catch (IOException e) {
+            throw new IOException("Error deserialize: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new ClassNotFoundException("Incompatible save version!");
         }
     }
 
