@@ -1,9 +1,11 @@
 package sorter;
 
-import java.util.Comparator;
 import model.Person;
 
+import java.util.Comparator;
+
 public class MergeSort implements UserSorter {
+
     private final Comparator<Person> comparator;
 
     public MergeSort(Comparator<Person> comparator) {
@@ -12,12 +14,22 @@ public class MergeSort implements UserSorter {
 
     @Override
     public Person[] sort(Person[] people) {
-        if (people == null || people.length < 2) {
+        if (people == null) {
             return null;
         }
 
+        if (people.length < 2) {
+            return people;
+        }
+
         Person[] buffer = new Person[people.length];
-        mergeSort(people, buffer, 0, people.length - 1, comparator);
+
+        mergeSort(
+                people,
+                buffer,
+                0,
+                people.length - 1
+        );
 
         return people;
     }
@@ -26,8 +38,7 @@ public class MergeSort implements UserSorter {
             Person[] people,
             Person[] buffer,
             int left,
-            int right,
-            Comparator<Person> comparator
+            int right
     ) {
         if (left >= right) {
             return;
@@ -35,10 +46,10 @@ public class MergeSort implements UserSorter {
 
         int middle = left + (right - left) / 2;
 
-        mergeSort(people, buffer, left, middle, comparator);
-        mergeSort(people, buffer, middle + 1, right, comparator);
+        mergeSort(people, buffer, left, middle);
+        mergeSort(people, buffer, middle + 1, right);
 
-        merge(people, buffer, left, middle, right, comparator);
+        merge(people, buffer, left, middle, right);
     }
 
     private void merge(
@@ -46,8 +57,7 @@ public class MergeSort implements UserSorter {
             Person[] buffer,
             int left,
             int middle,
-            int right,
-            Comparator<Person> comparator
+            int right
     ) {
         int leftIndex = left;
         int rightIndex = middle + 1;
@@ -58,18 +68,26 @@ public class MergeSort implements UserSorter {
                     people[leftIndex],
                     people[rightIndex]
             ) <= 0) {
-                buffer[bufferIndex++] = people[leftIndex++];
+                buffer[bufferIndex] = people[leftIndex];
+                leftIndex++;
             } else {
-                buffer[bufferIndex++] = people[rightIndex++];
+                buffer[bufferIndex] = people[rightIndex];
+                rightIndex++;
             }
+
+            bufferIndex++;
         }
 
         while (leftIndex <= middle) {
-            buffer[bufferIndex++] = people[leftIndex++];
+            buffer[bufferIndex] = people[leftIndex];
+            leftIndex++;
+            bufferIndex++;
         }
 
         while (rightIndex <= right) {
-            buffer[bufferIndex++] = people[rightIndex++];
+            buffer[bufferIndex] = people[rightIndex];
+            rightIndex++;
+            bufferIndex++;
         }
 
         for (int i = left; i <= right; i++) {
