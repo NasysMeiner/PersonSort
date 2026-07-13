@@ -1,19 +1,23 @@
 package bootstrap;
 
 import application.FileDataPersister;
+import application.ManualPersonInputService;
+import application.PersonInputService;
 import input.ConsoleUserInput;
 import input.UserInput;
+import java.util.Comparator;
 import model.DataBase;
+import model.DataBaseService;
+import model.Person;
 import persistence.FileStateLoader;
 import persistence.FileStateSaver;
 import runner.MainRunner;
-import sorter.MailSorter;
-import sorter.NameSorter;
-import sorter.PasswordSorter;
+import sorter.MergeSort;
 import sorter.SorterSelection;
 import sorter.UserSorter;
 import ui.ConsoleView;
 import ui.View;
+
 
 public class MainInitializer {
      public MainRunner initialize() {
@@ -22,15 +26,19 @@ public class MainInitializer {
           DataBase db = new DataBase();
           FileDataPersister dataPersister = new FileDataPersister(stateSaver, stateLoader, db);
 
-          UserSorter nameSorter = new NameSorter();
-          UserSorter passwordSorter = new PasswordSorter();
-          UserSorter mailSorter = new MailSorter();
+          DataBaseService dataBaseService = new DataBaseService(db);
+
+          UserSorter nameSorter = new MergeSort(Comparator.comparing(Person::getName));
+          UserSorter passwordSorter = new MergeSort(Comparator.comparing(Person::getPassword));
+          UserSorter mailSorter = new MergeSort(Comparator.comparing(Person::getMail));
           SorterSelection sorterSelection = new SorterSelection(nameSorter, passwordSorter, mailSorter);
 
           View view = new ConsoleView();
           UserInput userInput = new ConsoleUserInput();
 
-          MainRunner mainRunner = new MainRunner(dataPersister, sorterSelection, view, userInput);
+          PersonInputService personInputService = new ManualPersonInputService(userInput, view, db);
+
+          MainRunner mainRunner = new MainRunner(dataPersister, dataBaseService, sorterSelection, view, userInput, personInputService);
 
           return mainRunner;
      }

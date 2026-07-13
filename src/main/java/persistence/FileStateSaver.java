@@ -16,12 +16,12 @@ public class FileStateSaver implements StateSaver {
     }
 
     @Override
-    public boolean saveState(byte[] data) {
+    public String saveState(byte[] data) {
         if (data == null || data.length == 0) {
-            return false;
+            return "";
         }
         if (!folder.exists() && !folder.mkdirs()) {
-            return false;
+            return "";
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -29,11 +29,10 @@ public class FileStateSaver implements StateSaver {
         File file = new File(folder, now.format(formatter) + ".dat");
 
         try {
-            Files.write(file.toPath(), data);
-            return true;
+            return Files.write(file.toPath(), data).toFile().getAbsolutePath();
         } catch (IOException e) {
-            System.out.println("Ошибка сохранения: " + e.getMessage());
-            return false;
+            System.out.println("Save error: " + e.getMessage());
+            return "";
         }
     }
 
@@ -57,5 +56,10 @@ public class FileStateSaver implements StateSaver {
         }
         return Arrays.stream(files)
                 .toArray(File[]::new);
+    }
+
+    @Override
+    public String getAbsolutePath() {
+        return folder.getAbsolutePath() + "\\";
     }
 }

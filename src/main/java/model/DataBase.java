@@ -47,6 +47,7 @@ public class DataBase implements Iterable<Person>, Serializable {
 
         return removedItem;
     }
+
     public int getSize(){
         return size;
     }
@@ -57,6 +58,7 @@ public class DataBase implements Iterable<Person>, Serializable {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Человек с таким именем не найден"));
     }
+
     public Person getByEmail(String email){
         return Arrays.stream(persons)
                 .filter(person -> person.getMail().equalsIgnoreCase(email))
@@ -70,6 +72,7 @@ public class DataBase implements Iterable<Person>, Serializable {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Человек с таким ID не найден"));
     }
+    
     public int getIndexByName(String name){
         for (int i = 0; i < persons.length; i++) {
             if (persons[i].getName().equalsIgnoreCase(name)){
