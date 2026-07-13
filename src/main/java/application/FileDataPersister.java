@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.stream.Stream;
 import model.DataBase;
 import model.Person;
 import persistence.StateLoader;
@@ -58,9 +59,8 @@ public class FileDataPersister implements DataPersister {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
              ObjectInputStream ois = new ObjectInputStream(bais)) {
             DataBase loaded = (DataBase) ois.readObject();
-            for (Person p : loaded) {
-                db.add(p);
-            }
+            Stream.of(loaded.getAll())
+                .forEach(db::add);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ошибка десериализации: " + e.getMessage());
         }

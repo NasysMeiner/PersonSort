@@ -58,6 +58,9 @@ public class MainRunner {
     }
 
     private void loadStateMenu() {
+        if(!dataPersister.isStateExists())
+            return;
+
         boolean isWork = true;
         while (isWork) { 
             view.showSaveStateMenu();
@@ -77,11 +80,7 @@ public class MainRunner {
     }
 
     private void loadFileMenu() {
-        String[] allFile = null;
-
-        if(dataPersister.isStateExists()) {
-            allFile = dataPersister.getAllStateExists();
-        }
+        String[] allFile = dataPersister.getAllStateExists();
 
         int idx = 0;
 
