@@ -1,7 +1,5 @@
 package model;
 
-import java.util.stream.Stream;
-
 /*
 C - create
 R - read
@@ -9,11 +7,23 @@ U - update
 D - delete
  */
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Stream;
+
 public class DataBaseService {
     private DataBase dataBase;
 
     public DataBaseService(DataBase dataBase){
         this.dataBase = dataBase;
+    }
+    public int getSize(){
+        return dataBase.getSize();
     }
 
     // Create
@@ -29,10 +39,6 @@ public class DataBaseService {
         return newPerson;
     }
 
-    public void addPerson(Person person) {
-        this.dataBase.add(person);
-    }
-
     public Person[] AddAllPerson(Person[] persons) {
         Stream.of(persons)
             .forEach(this::addPerson);
@@ -46,11 +52,11 @@ public class DataBaseService {
     }
 
     public Person getById(Long id){
-        return dataBase.get(dataBase.getIndexById(id));
-    }
-
-    public int getSize() {
-        return dataBase.getSize();
+        try {
+            return dataBase.get(dataBase.getIndexById(id));
+        } catch (IndexOutOfBoundsException e){
+            return null;
+        }
     }
 
     // Update
@@ -74,13 +80,43 @@ public class DataBaseService {
          return dataBase.getIndexByName(name);
     }
 
-    @Override
-    public String toString(){
+    public void printData(){
         StringBuilder sb = new StringBuilder();
-
-        for (Person person : dataBase)
+        for (Person person : dataBase){
             sb.append(person).append("\n");
+        }
+        System.out.println(sb);
+    }
 
-        return sb.toString();
+    public long countOccurrences(String targetName) throws InterruptedException, ExecutionException {
+        int threads = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
+        int n = dataBase.getSize();
+        int chunk = Math.max(1, n / threads);
+        var futures = new ArrayList<Future<Long>>();
+        for (int t = 0; t < threads; t++) {
+            int start = t * chunk;
+//            int end = (t == threads - 1) ? n : ( t + 1) * chunk;
+            int end = (t == threads - 1) ? n : Math.min(n, (t + 1) * chunk);
+            futures.add(executor.submit(() ->{
+                long localCount = 0;
+                for (int i = start; i < end; i++) {
+                    if (dataBase.get(i).getName().equals(targetName)){
+                        localCount++;
+                    }
+                }
+                return localCount;
+            }));
+        }
+        long total = 0;
+        for (var f : futures){
+            total += f.get();
+        }
+        executor.shutdown();
+        return total;
+    }
+
+    public void addPerson(Person person) {
+        this.dataBase.add(person);
     }
 }

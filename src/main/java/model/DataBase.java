@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class DataBase implements Iterable<Person>, Serializable {
     private Person[] persons;
     private int size = 0;
-    private static AtomicLong idCreator = new AtomicLong(0);
+    private AtomicLong idCreator = new AtomicLong(0);
 
     @SuppressWarnings("unchecked")
     public DataBase(){
@@ -37,6 +37,12 @@ public class DataBase implements Iterable<Person>, Serializable {
                     + " за пределами действительного интервала от 0 до " + size );
         }
         return persons[index];
+    }
+    //это для итерации в стримах
+    public Person[] toArray() {
+        Person[] result = new Person[size];
+        System.arraycopy(persons, 0, result, 0, size);
+        return result;
     }
 
     public Person delete(int index){
@@ -79,7 +85,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
     
     public int getIndexByName(String name){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getName().equalsIgnoreCase(name)){
                 return i;
             }
@@ -88,7 +94,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
 
     public int getIndexByEmail(String email){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getMail().equalsIgnoreCase(email)){
                 return i;
             }
@@ -97,7 +103,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
 
     public int getIndexById(Long id){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getId().equals(id)){
                 return i;
             }
@@ -148,4 +154,5 @@ public class DataBase implements Iterable<Person>, Serializable {
             Iterator.super.remove();
         }
     }
+
 }
