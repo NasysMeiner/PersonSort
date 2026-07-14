@@ -1,7 +1,9 @@
 package test.tests;
 
 import model.Person;
+import sorter.EvenOddSorterDecorator;
 import sorter.MergeSort;
+import sorter.UserSorter;
 import test.Test;
 
 import java.util.Comparator;
@@ -14,6 +16,7 @@ public class SorterApplicationTest extends Test {
             testNameSorter();
             testPasswordSorter();
             testMailSorter();
+            testEvenLengthNameSorting();
 
             setSuccess();
             setMessage("All sorter tests passed");
@@ -110,26 +113,84 @@ public class SorterApplicationTest extends Test {
         );
     }
 
+    private void testEvenLengthNameSorting() {
+        Person[] people = new Person[]{
+                createPerson("Zoya", "zoya@mail.com", "pass001"),
+                createPerson("Bob", "bob@mail.com", "pass002"),
+                createPerson("Anna", "anna@mail.com", "pass003"),
+                createPerson("Tom", "tom@mail.com", "pass004"),
+                createPerson("Ivan", "ivan@mail.com", "pass005")
+        };
+
+        UserSorter sorter = new EvenOddSorterDecorator(
+                new MergeSort(Comparator.comparing(Person::getName)),
+                person -> person.getName() != null
+                        && person.getName().length() % 2 == 0
+        );
+
+        sorter.sort(people);
+
+        assertEquals(
+                "Anna",
+                people[0].getName(),
+                "Even-length sorting: first selected position"
+        );
+
+        assertEquals(
+                "Bob",
+                people[1].getName(),
+                "Even-length sorting: odd-length name must stay in place"
+        );
+
+        assertEquals(
+                "Ivan",
+                people[2].getName(),
+                "Even-length sorting: second selected position"
+        );
+
+        assertEquals(
+                "Tom",
+                people[3].getName(),
+                "Even-length sorting: odd-length name must stay in place"
+        );
+
+        assertEquals(
+                "Zoya",
+                people[4].getName(),
+                "Even-length sorting: third selected position"
+        );
+    }
+
     private Person[] createPeople() {
         return new Person[]{
-                new Person.Builder()
-                        .setName("Ivan")
-                        .setMail("ivan@mail.com")
-                        .setPassword("qwerty")
-                        .build(),
-
-                new Person.Builder()
-                        .setName("Petr")
-                        .setMail("petr@mail.com")
-                        .setPassword("zxc999")
-                        .build(),
-
-                new Person.Builder()
-                        .setName("Anna")
-                        .setMail("anna@mail.com")
-                        .setPassword("abc123")
-                        .build()
+                createPerson(
+                        "Ivan",
+                        "ivan@mail.com",
+                        "qwerty"
+                ),
+                createPerson(
+                        "Petr",
+                        "petr@mail.com",
+                        "zxc999"
+                ),
+                createPerson(
+                        "Anna",
+                        "anna@mail.com",
+                        "abc123"
+                )
         };
+    }
+
+    private Person createPerson(
+            String name,
+            String mail,
+            String password
+    ) {
+        return new Person.Builder()
+                .setName(name)
+                .setMail(mail)
+                .setPassword(password)
+                .build();
     }
 
     private void assertEquals(
