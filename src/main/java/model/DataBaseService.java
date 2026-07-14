@@ -1,27 +1,14 @@
 package model;
 
-/*
-C - create
-R - read
-U - update
-D - delete
- */
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public class DataBaseService {
-    private DataBase dataBase;
+    private final DataBase dataBase;
 
     public DataBaseService(DataBase dataBase){
         this.dataBase = dataBase;
     }
+    
     public int getSize(){
         return dataBase.getSize();
     }
@@ -46,77 +33,14 @@ public class DataBaseService {
         return persons;
     }
 
+    public Person addPerson(Person person) {
+        this.dataBase.add(person);
+
+        return person;
+    }
+
     // Read
     public Person[] getAll(){
         return dataBase.getAll();
-    }
-
-    public Person getById(Long id){
-        try {
-            return dataBase.get(dataBase.getIndexById(id));
-        } catch (IndexOutOfBoundsException e){
-            return null;
-        }
-    }
-
-    // Update
-    public Person update(Long id, Person update){
-        Person personToUpdate = dataBase.get(dataBase.getIndexById(id));
-        personToUpdate.setName(update.getName());
-        personToUpdate.setMail(update.getMail());
-        personToUpdate.setPassword(update.getPassword());
-
-        return personToUpdate;
-    }
-
-    // Delete
-    public Person deletePersonById(Long id){
-        int indexToDelete = dataBase.getIndexById(id);
-
-        return dataBase.delete(indexToDelete);
-    }
-
-    public int getIndexByName(String name){
-         return dataBase.getIndexByName(name);
-    }
-
-    public void printData(){
-        StringBuilder sb = new StringBuilder();
-        for (Person person : dataBase){
-            sb.append(person).append("\n");
-        }
-        System.out.println(sb);
-    }
-
-    public long countOccurrences(String targetName) throws InterruptedException, ExecutionException {
-        int threads = Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(threads);
-        int n = dataBase.getSize();
-        int chunk = Math.max(1, n / threads);
-        var futures = new ArrayList<Future<Long>>();
-        for (int t = 0; t < threads; t++) {
-            int start = t * chunk;
-//            int end = (t == threads - 1) ? n : ( t + 1) * chunk;
-            int end = (t == threads - 1) ? n : Math.min(n, (t + 1) * chunk);
-            futures.add(executor.submit(() ->{
-                long localCount = 0;
-                for (int i = start; i < end; i++) {
-                    if (dataBase.get(i).getName().equals(targetName)){
-                        localCount++;
-                    }
-                }
-                return localCount;
-            }));
-        }
-        long total = 0;
-        for (var f : futures){
-            total += f.get();
-        }
-        executor.shutdown();
-        return total;
-    }
-
-    public void addPerson(Person person) {
-        this.dataBase.add(person);
     }
 }

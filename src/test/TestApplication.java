@@ -2,7 +2,10 @@ package test;
 
 import java.util.Arrays;
 import test.tests.AppendResultTest;
+import test.tests.DataBaseTest;
+import test.tests.DataServiceTest;
 import test.tests.FileDataPersisterTest;
+import test.tests.PersonBuilderTest;
 import test.tests.RandomDataHolderTest;
 import test.tests.SearchServiceTest;
 import test.tests.SorterApplicationTest;
@@ -35,6 +38,9 @@ public class TestApplication {
         addTest(new FileDataPersisterTest());
         addTest(new AppendResultTest());
         addTest(new SearchServiceTest());
+        addTest(new DataBaseTest());
+        addTest(new DataServiceTest());
+        addTest(new PersonBuilderTest());
     }
 
     private void run() {
