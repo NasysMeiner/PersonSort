@@ -30,6 +30,8 @@ public class SortMenuCommand extends Command {
             return MenuType.MAIN_MENU;
         }
 
+        boolean useDecorator = getIsUseDecorator();
+
         view.showSortMenu();
         String command = userInput.getInput();
 
@@ -39,18 +41,18 @@ public class SortMenuCommand extends Command {
         MenuType nextMenu = MenuType.MAIN_MENU;
         switch (command) {
             case "1" -> {
-                sortedArray = sorterSelection.sortCollectionToName(dataBaseService.getAll());
-                titleSort = "Sort to Name";
+                sortedArray = sorterSelection.sortCollectionToName(dataBaseService.getAll(), useDecorator);
+                titleSort = "Sort to Name" + (useDecorator ? "(Even/Odd decorator)" : "");
             }
 
             case "2" -> {
-                sortedArray = sorterSelection.sortCollectionToPassword(dataBaseService.getAll());
-                titleSort = "Sort to Password";
+                sortedArray = sorterSelection.sortCollectionToPassword(dataBaseService.getAll(), useDecorator);
+                titleSort = "Sort to Password" + (useDecorator ? "(Even/Odd decorator)" : "");
             }
 
             case "3" -> {
-                sortedArray = sorterSelection.sortCollectionToMail(dataBaseService.getAll());
-                titleSort = "Sort to Mail";
+                sortedArray = sorterSelection.sortCollectionToMail(dataBaseService.getAll(), useDecorator);
+                titleSort = "Sort to Mail" + (useDecorator ? "(Even/Odd decorator)" : "");
             }
 
             case "0" -> {}
@@ -76,4 +78,18 @@ public class SortMenuCommand extends Command {
         return nextMenu;
     }
     
+    private boolean getIsUseDecorator() {
+        view.showMessage("Use Even/Odd sort (1) or standart sort (0)?\n");
+
+        String input = userInput.getInput();
+
+        if(input.equals("1"))
+            return true;
+        else if(input.equals("0"))
+            return false;
+        
+        view.showMessage("Unknown command! Use standart sort: \n0");
+
+        return false;
+    }
 }
