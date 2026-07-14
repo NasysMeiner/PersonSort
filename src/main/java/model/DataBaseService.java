@@ -17,7 +17,8 @@ import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public class DataBaseService {
-    DataBase dataBase;
+    private DataBase dataBase;
+
     public DataBaseService(DataBase dataBase){
         this.dataBase = dataBase;
     }
@@ -26,16 +27,23 @@ public class DataBaseService {
     }
 
     // Create
-    public Person addPerson(String name, String email, String password){
+    public Person addPerson(String name, String email, String password) {
         Person newPerson = new Person.Builder()
                 .setName(name)
                 .setMail(email)
                 .setPassword(password)
                 .build();
+
         this.dataBase.add(newPerson);
 
         return newPerson;
+    }
 
+    public Person[] AddAllPerson(Person[] persons) {
+        Stream.of(persons)
+            .forEach(this::addPerson);
+
+        return persons;
     }
 
     // Read
@@ -53,12 +61,14 @@ public class DataBaseService {
         personToUpdate.setName(update.getName());
         personToUpdate.setMail(update.getMail());
         personToUpdate.setPassword(update.getPassword());
+
         return personToUpdate;
     }
 
     // Delete
     public Person deletePersonById(Long id){
         int indexToDelete = dataBase.getIndexById(id);
+
         return dataBase.delete(indexToDelete);
     }
 
@@ -101,11 +111,6 @@ public class DataBaseService {
         return total;
     }
 
-    public Person[] AddAllPerson(Person[] data) {
-        Stream.of(data)
-                .forEach(this::addPerson);
-        return dataBase.getAll();
-    }
     public void addPerson(Person person) {
         this.dataBase.add(person);
     }
