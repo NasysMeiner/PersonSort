@@ -2,12 +2,19 @@ package sorter;
 
 import model.Person;
 
+import java.util.function.Predicate;
+
 public class EvenOddSorterDecorator implements UserSorter {
 
     private final UserSorter sorter;
+    private final Predicate<Person> condition;
 
-    public EvenOddSorterDecorator(UserSorter sorter) {
+    public EvenOddSorterDecorator(
+            UserSorter sorter,
+            Predicate<Person> condition
+    ) {
         this.sorter = sorter;
+        this.condition = condition;
     }
 
     @Override
@@ -16,32 +23,37 @@ public class EvenOddSorterDecorator implements UserSorter {
             return people;
         }
 
-        Person[] evenPeople = new Person[(people.length + 1) / 2];
-        Person[] oddPeople = new Person[people.length / 2];
+        int selectedCount = 0;
 
-        int evenIndex = 0;
-        int oddIndex = 0;
-
-        for (int i = 0; i < people.length; i++) {
-            if (i % 2 == 0) {
-                evenPeople[evenIndex++] = people[i];
-            } else {
-                oddPeople[oddIndex++] = people[i];
+        for (Person person : people) {
+            if (person != null && condition.test(person)) {
+                selectedCount++;
             }
         }
 
-        evenPeople = sorter.sort(evenPeople);
-        oddPeople = sorter.sort(oddPeople);
+        if (selectedCount < 2) {
+            return people;
+        }
 
-        evenIndex = 0;
-        oddIndex = 0;
+        Person[] selectedPeople = new Person[selectedCount];
+        int[] selectedIndexes = new int[selectedCount];
+
+        int selectedIndex = 0;
 
         for (int i = 0; i < people.length; i++) {
-            if (i % 2 == 0) {
-                people[i] = evenPeople[evenIndex++];
-            } else {
-                people[i] = oddPeople[oddIndex++];
+            Person person = people[i];
+
+            if (person != null && condition.test(person)) {
+                selectedPeople[selectedIndex] = person;
+                selectedIndexes[selectedIndex] = i;
+                selectedIndex++;
             }
+        }
+
+        sorter.sort(selectedPeople);
+
+        for (int i = 0; i < selectedCount; i++) {
+            people[selectedIndexes[i]] = selectedPeople[i];
         }
 
         return people;
