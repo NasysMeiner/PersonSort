@@ -3,6 +3,13 @@ package bootstrap;
 import application.FileDataPersister;
 import application.ManualPersonInputService;
 import application.PersonInputService;
+import command.Command;
+import command.DataMenuCommand;
+import command.MainMenuCommand;
+import command.ShowDataMenuCommand;
+import command.SortMenuCommand;
+import command.StartLoadCommand;
+import data.RandomDataHolder;
 import input.ConsoleUserInput;
 import input.UserInput;
 import model.DataBase;
@@ -10,6 +17,9 @@ import model.DataBaseService;
 import model.Person;
 import persistence.FileStateLoader;
 import persistence.FileStateSaver;
+import registry.MenuRegistry;
+import router.MenuType;
+import router.Router;
 import runner.MainRunner;
 import sorter.EvenOddSorterDecorator;
 import sorter.MergeSort;
@@ -60,8 +70,26 @@ public class MainInitializer {
           View view = new ConsoleView();
           UserInput userInput = new ConsoleUserInput();
 
-          PersonInputService personInputService =
-                  new ManualPersonInputService(userInput, view, db);
+          PersonInputService personInputService = new ManualPersonInputService(userInput, view, db);
+
+          RandomDataHolder randomDataHolder = new RandomDataHolder();
+
+          Command startLoadCommand = new StartLoadCommand(view, userInput, dataPersister);
+          Command menuCommand = new MainMenuCommand(view, userInput);
+          Command dataMenuCommand = new DataMenuCommand(view, userInput, dataBaseService, randomDataHolder, personInputService);
+          Command showDataMenuCommand = new ShowDataMenuCommand(view, userInput, dataBaseService);
+          Command sortMenuCommand = new SortMenuCommand(view, userInput, dataBaseService, sorterSelection);
+
+          MenuRegistry menuRegistry = new MenuRegistry();
+          menuRegistry.registry(MenuType.START_LOAD_MENU, startLoadCommand);
+          menuRegistry.registry(MenuType.MAIN_MENU, menuCommand);
+          menuRegistry.registry(MenuType.FILL_MENU, dataMenuCommand);
+          menuRegistry.registry(MenuType.SHOW_DATA_MENU, showDataMenuCommand);
+          menuRegistry.registry(MenuType.SORT_MENU, sortMenuCommand);
+
+          Router router = new Router(menuRegistry);
+
+          MainRunner mainRunner = new MainRunner(dataPersister, dataBaseService, view, router);
 
           return new MainRunner(
                   dataPersister,
