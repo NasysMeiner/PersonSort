@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Stream;
 
 public class DataBaseService {
     DataBase dataBase;
@@ -101,9 +102,11 @@ public class DataBaseService {
     }
 
     public Person[] AddAllPerson(Person[] data) {
-        for (Person person : data){
-            dataBase.add(person);
-        }
+        Stream.of(data)
+                .forEach(this::addPerson);
         return dataBase.getAll();
+    }
+    public void addPerson(Person person) {
+        this.dataBase.add(person);
     }
 }
