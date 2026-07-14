@@ -45,7 +45,7 @@ public class MainInitializer {
           UserSorter mailSorter = new MergeSort(Comparator.comparing(Person::getMail));
           SorterSelection sorterSelection = new SorterSelection(nameSorter, passwordSorter, mailSorter);
 
-          SearchService searchService = new SearchService(dataBaseService);
+          SearchService searchService = new SearchService();
 
           View view = new ConsoleView();
           UserInput userInput = new ConsoleUserInput();

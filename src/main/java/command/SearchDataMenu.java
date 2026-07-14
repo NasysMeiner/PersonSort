@@ -1,6 +1,7 @@
 package command;
 
 import input.UserInput;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import model.DataBaseService;
 import model.Person;
@@ -23,31 +24,22 @@ public class SearchDataMenu extends Command {
     public MenuType execute() {
         if(dataBaseService.getSize() == 0) {
             view.showMessage("No Data!");
+            waitForEnter();
             return MenuType.MAIN_MENU;
         }
 
         view.showSearchDataMenu();
         String command = userInput.getInput();
 
-        view.showMessage("Target: ");
-
-        String target = userInput.getInput().trim();
-        if (target.isEmpty()) {
-            view.showMessage("Search target cannot be empty. Try again!");
-            waitForEnter();
-
-            return MenuType.SEARCH_DATA_MENU;
-        }
-
         MenuType nextMenu;
         switch (command) {
-            case "1" -> nextMenu = Search((person) -> person.getName().equals(target), target);
+            case "1" -> nextMenu = search(target -> (person) -> person.getName().equals(target));
 
-            case "2" -> nextMenu = Search((person) -> person.getPassword().equals(target), target);
+            case "2" -> nextMenu = search(target -> (person) -> person.getPassword().equals(target));
 
-            case "3" -> nextMenu = Search((person) -> person.getMail().equals(target), target);
+            case "3" -> nextMenu = search(target -> (person) -> person.getMail().equals(target));
 
-            case "0" -> nextMenu = null;
+            case "0" -> nextMenu = MenuType.MAIN_MENU;
 
             default -> {
                 view.showMessage("Unknown command. Return main menu");
@@ -58,11 +50,26 @@ public class SearchDataMenu extends Command {
         return nextMenu;
     }
     
-    private MenuType Search(Predicate<Person> predicate, String target) {
-        long searched = searchService.searchElements(predicate);
+    private MenuType search(Function<String, Predicate<Person>> function) {
+        String target = getTarget();
+        long searched = searchService.searchElements(function.apply(target), dataBaseService.getAll());
         view.showMessage("Target: '" + target + "' count in collection: " + searched);
         waitForEnter();
 
         return MenuType.MAIN_MENU;
+    }
+
+    private String getTarget() {
+        view.showMessage("Target: ");
+
+        String target = userInput.getInput().trim();
+        if (target.isEmpty()) {
+            view.showMessage("Search target cannot be empty. Try again!");
+            waitForEnter();
+
+            return null;
+        }
+
+        return target;
     }
 }

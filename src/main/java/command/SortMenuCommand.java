@@ -26,6 +26,7 @@ public class SortMenuCommand extends Command {
     public MenuType execute() {
         if(dataBaseService.getAll().length < 2) {
             view.showMessage("The amount of data is less than 2!\nUse command '1.Go to 'Fill data menu''");
+            waitForEnter();
             return MenuType.MAIN_MENU;
         }
 
