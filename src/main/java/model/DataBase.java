@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class DataBase implements Iterable<Person>, Serializable {
     private Person[] persons;
     private int size = 0;
-    private static AtomicLong idCreator = new AtomicLong(0);
+    private AtomicLong idCreator = new AtomicLong(0);
 
     @SuppressWarnings("unchecked")
     public DataBase(){

@@ -52,7 +52,11 @@ public class DataBaseService {
     }
 
     public Person getById(Long id){
-        return dataBase.get(dataBase.getIndexById(id));
+        try {
+            return dataBase.get(dataBase.getIndexById(id));
+        } catch (IndexOutOfBoundsException e){
+            return null;
+        }
     }
 
     // Update
@@ -92,7 +96,8 @@ public class DataBaseService {
         var futures = new ArrayList<Future<Long>>();
         for (int t = 0; t < threads; t++) {
             int start = t * chunk;
-            int end = (t == threads - 1) ? n : ( t + 1) * chunk;
+//            int end = (t == threads - 1) ? n : ( t + 1) * chunk;
+            int end = (t == threads - 1) ? n : Math.min(n, (t + 1) * chunk);
             futures.add(executor.submit(() ->{
                 long localCount = 0;
                 for (int i = start; i < end; i++) {
