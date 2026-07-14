@@ -80,7 +80,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
     
     public int getIndexByName(String name){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getName().equalsIgnoreCase(name)){
                 return i;
             }
@@ -89,7 +89,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
 
     public int getIndexByEmail(String email){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getMail().equalsIgnoreCase(email)){
                 return i;
             }
@@ -98,7 +98,7 @@ public class DataBase implements Iterable<Person>, Serializable {
     }
 
     public int getIndexById(Long id){
-        for (int i = 0; i < persons.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (persons[i].getId().equals(id)){
                 return i;
             }
