@@ -11,6 +11,7 @@ public class DataValidator {
 
         return name.matches("^[a-zA-Z]+$") || name.matches("^[а-яА-ЯёЁ]+$");
     }
+    
     public static boolean validateEmail(String email){
         Pattern pattern = Pattern.compile("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$");
         Matcher matcher = pattern.matcher(email);

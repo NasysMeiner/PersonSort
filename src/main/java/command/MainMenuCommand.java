@@ -22,6 +22,8 @@ public class MainMenuCommand extends Command {
 
             case "3" -> nextMenu = MenuType.SHOW_DATA_MENU;
 
+            case "4" -> nextMenu = MenuType.SEARCH_DATA_MENU;
+
             case "0" -> nextMenu = null;
 
             default -> {

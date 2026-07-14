@@ -30,6 +30,7 @@ public class ConsoleView implements View {
         builder.append("1. Go to 'Fill data menu'\n");
         builder.append("2. Go to 'Sort Menu'\n");
         builder.append("3. Show all data\n");
+        builder.append("4. Search element\n");
         builder.append("0. Exit\n");
         builder.append("\nChoose option: ");
 
@@ -59,14 +60,25 @@ public class ConsoleView implements View {
     }
 
     @Override
+    public void showSearchDataMenu() {
+        StringBuilder builder = new StringBuilder("========== Search Menu ==========\n");
+        builder.append("1. Search by name\n");
+        builder.append("2. Search by password\n");
+        builder.append("3. Search by email\n");
+        builder.append("0. back\n");
+
+        showMessage(builder.toString());
+    }
+
+    @Override
     public void showData(Person[] people) {
         if (people == null || people.length == 0) {
-            System.out.println("No data.");
+            showMessage("No data.");
             return;
         }
 
         for (Person person : people) {
-            System.out.println(person);
+            showMessage(person.toString());
         }
     }
 

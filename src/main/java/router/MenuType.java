@@ -6,4 +6,5 @@ public enum MenuType {
     FILL_MENU,
     SORT_MENU,
     SHOW_DATA_MENU,
+    SEARCH_DATA_MENU,
 }

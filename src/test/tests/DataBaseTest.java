@@ -1,9 +1,9 @@
 package test.tests;
 
-import model.DataBase;
-import model.Person;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import model.DataBase;
+import model.Person;
 
 public class DataBaseTest {
     public static void main(String[] args) {

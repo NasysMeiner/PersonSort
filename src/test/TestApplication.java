@@ -4,6 +4,7 @@ import java.util.Arrays;
 import test.tests.AppendResultTest;
 import test.tests.FileDataPersisterTest;
 import test.tests.RandomDataHolderTest;
+import test.tests.SearchServiceTest;
 import test.tests.SorterApplicationTest;
 
 public class TestApplication {
@@ -33,12 +34,14 @@ public class TestApplication {
         addTest(new RandomDataHolderTest());
         addTest(new FileDataPersisterTest());
         addTest(new AppendResultTest());
+        addTest(new SearchServiceTest());
     }
 
     private void run() {
         StringBuilder stringBuilder = new StringBuilder("\n");
 
         for (int i = 0; i < testCount; i++) {
+            stringBuilder.setLength(0);
             Test test = allTests[i];
             test.run();
 
