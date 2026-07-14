@@ -3,9 +3,9 @@ package application;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -93,9 +93,9 @@ public class FileDataPersister implements DataPersister {
     }
 
     @Override
-    public void appendResult(String title, Person[] data) throws IOException {
+    public String appendResult(String title, Person[] data) throws IOException {
         if (data == null || data.length == 0) {
-            return;
+            return "";
         }
 
         String timestamp = LocalDateTime.now().format(TS_FMT);
@@ -107,12 +107,14 @@ public class FileDataPersister implements DataPersister {
         Path path = Paths.get(RESULTS_FILE);
         Files.write(path, block.getBytes(),
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+        return path.toFile().getCanonicalPath();
     }
 
     @Override
-    public void appendResult(String title, Person person) throws IOException {
+    public String appendResult(String title, Person person) throws IOException {
         if (person == null) {
-            return;
+            return "";
         }
 
         String timestamp = LocalDateTime.now().format(TS_FMT);
@@ -122,5 +124,7 @@ public class FileDataPersister implements DataPersister {
         Path path = Paths.get(RESULTS_FILE);
         Files.write(path, block.getBytes(),
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+        return path.toFile().getCanonicalPath();
     }
 }

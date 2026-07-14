@@ -58,7 +58,7 @@ public class MainInitializer {
           Command menuCommand = new MainMenuCommand(view, userInput);
           Command dataMenuCommand = new DataMenuCommand(view, userInput, dataBaseService, randomDataHolder, personInputService);
           Command showDataMenuCommand = new ShowDataMenuCommand(view, userInput, dataBaseService);
-          Command sortMenuCommand = new SortMenuCommand(view, userInput, dataBaseService, sorterSelection);
+          Command sortMenuCommand = new SortMenuCommand(view, userInput, dataBaseService, sorterSelection, dataPersister);
           Command searchDataMenu = new SearchDataMenu(view, userInput, searchService, dataBaseService);
 
           MenuRegistry menuRegistry = new MenuRegistry();
