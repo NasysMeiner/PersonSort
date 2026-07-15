@@ -5,6 +5,7 @@ import data.FileDataHolder;
 import data.RandomDataHolder;
 import input.UserInput;
 import model.DataBaseService;
+import model.Person;
 import router.MenuType;
 import ui.View;
 
@@ -31,20 +32,11 @@ public class DataMenuCommand extends Command {
 
         MenuType nextMenu = MenuType.MAIN_MENU;
         switch (command) {
-            case "1" -> {
-                nextMenu = loadFromFile();
-                waitForEnter();
-            }
+            case "1" -> nextMenu = loadFromFile();
 
-            case "2" -> {
-                nextMenu = loadRandom();
-                waitForEnter();
-            }
+            case "2" -> nextMenu = loadRandom();
 
-            case "3" -> {
-                personInputService.fill();
-                waitForEnter();
-            }
+            case "3" -> personInputService.fill();
 
             case "0" -> nextMenu = MenuType.MAIN_MENU;
 
@@ -61,7 +53,8 @@ public class DataMenuCommand extends Command {
         try {
             view.showMessage("Enter your absolute file path:");
             String filePath = userInput.getInput();
-            view.showData((dataBaseService.AddAllPerson(new FileDataHolder(filePath).getData(-1))));
+            FileDataHolder fileDataHolder = new FileDataHolder(filePath, message -> view.showMessage("Error read in file: " + message));
+            showAddedData((dataBaseService.AddAllPerson(fileDataHolder.getData(-1))));
             return MenuType.MAIN_MENU;
         } catch (RuntimeException e) {
             view.showMessage("File error: " + e.getMessage());
@@ -76,7 +69,7 @@ public class DataMenuCommand extends Command {
         if(countData == -1)
             return MenuType.FILL_MENU;
 
-        view.showData(dataBaseService.AddAllPerson(randomDataHolder.getData(countData)));
+        showAddedData(dataBaseService.AddAllPerson(randomDataHolder.getData(countData)));
 
         return MenuType.MAIN_MENU;
     }
@@ -104,5 +97,10 @@ public class DataMenuCommand extends Command {
         }
 
         return countData;
+    }
+
+    private void showAddedData(Person[] addedData) {
+        view.showData(addedData);
+        waitForEnter();
     }
 }
