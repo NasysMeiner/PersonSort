@@ -3,6 +3,7 @@ package data;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import model.Person;
 
 public class FileDataHolder implements DataHolder {
@@ -25,7 +26,7 @@ public class FileDataHolder implements DataHolder {
     public Person[] getData(int count) {
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new IllegalArgumentException("File not founded: " + filePath);
+            throw new IllegalArgumentException("File not founded: (" + filePath + ")");
         }
 
         count = MAX;
@@ -40,7 +41,9 @@ public class FileDataHolder implements DataHolder {
                 if(line.trim().isEmpty())
                     continue;
 
-                String[] parseData = line.split(", ");
+                String[] parseData = line.split(",");
+
+                parseData = Stream.of(parseData).map(String::trim).toArray(String[]::new);
 
                 if(parseData.length != 3)
                     continue;
@@ -56,6 +59,8 @@ public class FileDataHolder implements DataHolder {
             }
         } catch(IOException ex) {
             throw new RuntimeException(ex.getMessage());
+        } catch(IllegalStateException ex) {
+            throw new IllegalStateException("Incorrect input file! " + ex.getMessage());
         }
 
         return persons.stream().toArray(Person[]::new);

@@ -59,10 +59,11 @@ public class DataMenuCommand extends Command {
 
     private MenuType loadFromFile() {
         try {
+            view.showMessage("Enter your absolute file path:");
             String filePath = userInput.getInput();
             view.showData((dataBaseService.AddAllPerson(new FileDataHolder(filePath).getData(-1))));
             return MenuType.MAIN_MENU;
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             view.showMessage("File error: " + e.getMessage());
             return MenuType.FILL_MENU;
         }
