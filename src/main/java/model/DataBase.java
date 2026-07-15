@@ -26,6 +26,11 @@ public class DataBase implements Iterable<Person>, Serializable {
         persons[size++] = person;
     }
 
+    public void add(Person[] persons) {
+        Arrays.stream(persons)
+            .forEach(this::add);
+    }
+
     public Person get(int index){
         if (index < 0 || index >= size){
             throw new IndexOutOfBoundsException("Индекс "+ index

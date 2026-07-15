@@ -1,21 +1,18 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import test.tests.EvenOddSorterDecoratorTest;
+import java.util.Arrays;
+import test.tests.AppendResultTest;
 import test.tests.FileDataPersisterTest;
-import test.tests.MergeSortTest;
 import test.tests.RandomDataHolderTest;
 import test.tests.SorterApplicationTest;
-import test.tests.SorterSelectionTest;
 
 public class TestApplication {
-
-    private final List<Test> allTests;
+    private Test[] allTests;
+    private int testCount;
 
     private TestApplication() {
-        allTests = new ArrayList<>();
+        allTests = new Test[10];
+        testCount = 0;
     }
 
     public static void main(String[] args) {
@@ -24,31 +21,39 @@ public class TestApplication {
         application.run();
     }
 
+    private void addTest(Test test) {
+        if (testCount == allTests.length) {
+            allTests = Arrays.copyOf(allTests, allTests.length * 2);
+        }
+        allTests[testCount++] = test;
+    }
+
     private void initializeAllTest() {
-        allTests.add(new MergeSortTest());
-        allTests.add(new EvenOddSorterDecoratorTest());
-        allTests.add(new SorterSelectionTest());
-        allTests.add(new SorterApplicationTest());
-        allTests.add(new RandomDataHolderTest());
-        allTests.add(new FileDataPersisterTest());
+        addTest(new SorterApplicationTest());
+        addTest(new RandomDataHolderTest());
+        addTest(new FileDataPersisterTest());
+        addTest(new AppendResultTest());
     }
 
     private void run() {
-        for (Test test : allTests) {
+        StringBuilder stringBuilder = new StringBuilder("\n");
+
+        for (int i = 0; i < testCount; i++) {
+            Test test = allTests[i];
             test.run();
 
             if (test.getCode() != -1) {
-                System.out.println(
-                        test.getNameTest()
-                                + ": "
-                                + test.getStatus()
-                );
+                stringBuilder.append(test.getNameTest());
+                stringBuilder.append(": ");
+                stringBuilder.append(test.getStatus());
 
                 if (test.getCode() == 0) {
-                    System.out.println("\t" + test.getResult());
+                    stringBuilder.append("\n");
+                    stringBuilder.append("\t");
+                    stringBuilder.append(test.getResult());
                 }
 
-                System.out.println();
+                System.out.println(stringBuilder.toString());
             }
         }
     }
