@@ -1,14 +1,8 @@
 package test;
 
 import java.util.Arrays;
-import test.tests.AppendResultTest;
-import test.tests.DataBaseTest;
-import test.tests.DataServiceTest;
-import test.tests.FileDataPersisterTest;
-import test.tests.PersonBuilderTest;
-import test.tests.RandomDataHolderTest;
-import test.tests.SearchServiceTest;
-import test.tests.SorterApplicationTest;
+
+import test.tests.*;
 
 public class TestApplication {
     private Test[] allTests;
@@ -41,6 +35,7 @@ public class TestApplication {
         addTest(new DataBaseTest());
         addTest(new DataServiceTest());
         addTest(new PersonBuilderTest());
+        addTest(new DataValidatorTest());
     }
 
     private void run() {
