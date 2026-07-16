@@ -25,7 +25,12 @@ public class MainRunner {
     }
 
     public void run() {
-        router.run(MenuType.START_LOAD_MENU);
+        try {
+            router.run(MenuType.START_LOAD_MENU);
+        } catch (Exception e) {
+            view.showMessage(e.getMessage());
+            return;
+        }
 
         if(dataBaseService.getSize() > 0) {
             try {

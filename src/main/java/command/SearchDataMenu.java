@@ -52,10 +52,13 @@ public class SearchDataMenu extends Command {
     
     private MenuType search(Function<String, Predicate<Person>> function) {
         String target = getTarget();
-        long searched = searchService.searchElements(function.apply(target), dataBaseService.getAll());
-        view.showMessage("Target: '" + target + "' count in collection: " + searched);
-        waitForEnter();
 
+        if(target != null) {
+            long searched = searchService.searchElements(function.apply(target), dataBaseService.getAll());
+            view.showMessage("Target: '" + target + "' count in collection: " + searched);
+            waitForEnter();
+        }
+        
         return MenuType.MAIN_MENU;
     }
 
