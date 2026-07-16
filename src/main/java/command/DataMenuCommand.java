@@ -17,7 +17,11 @@ public class DataMenuCommand extends Command {
     private final RandomDataHolder randomDataHolder;
     private final PersonInputService personInputService;
 
-    public DataMenuCommand(View view, UserInput userInput, DataBaseService dataBaseService, RandomDataHolder randomDataHolder, PersonInputService personInputService) {
+    public DataMenuCommand(View view, 
+        UserInput userInput, 
+        DataBaseService dataBaseService, 
+        RandomDataHolder randomDataHolder, 
+        PersonInputService personInputService) {
         super(view, userInput);
 
         this.dataBaseService = dataBaseService;
@@ -67,8 +71,10 @@ public class DataMenuCommand extends Command {
         view.showMessage("Enter count data: ");
         int countData = validationInput(userInput.getInput());
 
-        if(countData == -1)
+        if(countData == -1){
+            waitForEnter();
             return MenuType.FILL_MENU;
+        }
 
         showAddedData(dataBaseService.AddAllPerson(randomDataHolder.getData(countData)));
 
@@ -79,7 +85,7 @@ public class DataMenuCommand extends Command {
         int countData;
 
         if(input.isEmpty()) {
-            view.showMessage("Empty input. Use default: 1");
+            view.showMessage("Empty input!");
             return -1;
         }
 
@@ -87,8 +93,8 @@ public class DataMenuCommand extends Command {
             countData = Integer.parseInt(input);
 
             if(countData <= 0) {
-                view.showMessage("Incorrect input. Use default: 1");
-                countData = 1;
+                view.showMessage("Incorrect input!");
+                return -1;
             }
 
             countData = Math.min(countData, MAX_VALUE);

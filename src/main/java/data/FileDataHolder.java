@@ -53,8 +53,12 @@ public class FileDataHolder implements DataHolder {
 
                 parseData = Stream.of(parseData).map(String::trim).toArray(String[]::new);
 
-                if(parseData.length != 3)
+                if(parseData.length != 3) {
+                    if(errorView != null)
+                        errorView.accept("Number line: " + numberLine + " is empty. format(name, password, mail)");
+
                     continue;
+                }
 
                 try {
                     Person newPerson = new Person.Builder()
