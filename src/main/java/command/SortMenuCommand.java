@@ -3,10 +3,15 @@ package command;
 import application.DataPersister;
 import input.UserInput;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.function.Predicate;
 import model.DataBaseService;
 import model.Person;
 import router.MenuType;
+import sorter.EvenOddSorterDecorator;
+import sorter.MergeSort;
 import sorter.SorterSelection;
+import sorter.UserSorter;
 import ui.View;
 
 public class SortMenuCommand extends Command {
@@ -35,24 +40,30 @@ public class SortMenuCommand extends Command {
         view.showSortMenu();
         String command = userInput.getInput();
 
-        Person[] sortedArray = null;
+        Person[] sortedArray;
+        
+        Comparator<Person> comparator = null;
+        Predicate<Person> predicate = null;
         String titleSort = "";
 
         MenuType nextMenu = MenuType.MAIN_MENU;
         switch (command) {
             case "1" -> {
-                sortedArray = sorterSelection.sortCollectionToName(dataBaseService.getAll(), useDecorator);
-                titleSort = "Sort to Name" + (useDecorator ? "(Even/Odd decorator)" : "");
+                comparator = Comparator.comparing(Person::getName);
+                predicate = person -> person.getName() != null && person.getName().length() % 2 == 0;
+                titleSort = "Sort to Name";
             }
 
             case "2" -> {
-                sortedArray = sorterSelection.sortCollectionToPassword(dataBaseService.getAll(), useDecorator);
-                titleSort = "Sort to Password" + (useDecorator ? "(Even/Odd decorator)" : "");
+                comparator = Comparator.comparing(Person::getPassword);
+                predicate = person -> person.getPassword() != null && person.getPassword().length() % 2 == 0;
+                titleSort = "Sort to Password";
             }
 
             case "3" -> {
-                sortedArray = sorterSelection.sortCollectionToMail(dataBaseService.getAll(), useDecorator);
-                titleSort = "Sort to Mail" + (useDecorator ? "(Even/Odd decorator)" : "");
+                comparator = Comparator.comparing(Person::getMail);
+                predicate = person -> person.getMail() != null && person.getMail().length() % 2 == 0;
+                titleSort = "Sort to Mail";
             }
 
             case "0" -> {}
@@ -61,6 +72,20 @@ public class SortMenuCommand extends Command {
                 view.showMessage("Incorrect input!");
             }
         }
+
+        if(comparator == null)
+            return nextMenu;
+
+        UserSorter sorter = new MergeSort(comparator);
+
+        if(!useDecorator)
+            sorterSelection.setSorter(sorter);
+        else
+            sorterSelection.setSorter(new EvenOddSorterDecorator(sorter, predicate));
+
+        titleSort += useDecorator ? "(Even/Odd decorator)" : "";
+
+        sortedArray = sorterSelection.sort(dataBaseService.getAll());
 
         if(sortedArray != null && sortedArray.length != 0) {
             view.showData(sortedArray);

@@ -13,10 +13,8 @@ import command.StartLoadCommand;
 import data.RandomDataHolder;
 import input.ConsoleUserInput;
 import input.UserInput;
-import java.util.Comparator;
 import model.DataBase;
 import model.DataBaseService;
-import model.Person;
 import persistence.FileStateLoader;
 import persistence.FileStateSaver;
 import registry.MenuRegistry;
@@ -24,10 +22,7 @@ import router.MenuType;
 import router.Router;
 import runner.MainRunner;
 import service.SearchService;
-import sorter.EvenOddSorterDecorator;
-import sorter.MergeSort;
 import sorter.SorterSelection;
-import sorter.UserSorter;
 import ui.ConsoleView;
 import ui.View;
 
@@ -43,39 +38,7 @@ public class MainInitializer {
 
                 DataBaseService dataBaseService = new DataBaseService(db);
 
-                UserSorter nameSorter = new MergeSort(Comparator.comparing(Person::getName));
-
-                UserSorter nameSorterDecorator = new EvenOddSorterDecorator(
-                        nameSorter,
-                        person -> person.getName() != null
-                                && person.getName().length() % 2 == 0
-                );
-
-                UserSorter passwordSorter = new MergeSort(Comparator.comparing(Person::getPassword));
-
-                UserSorter passwordSorterDecorator = new EvenOddSorterDecorator(
-                        passwordSorter,
-                        person -> person.getPassword() != null
-                                && person.getPassword().length() % 2 == 0
-                );
-
-                UserSorter mailSorter = new MergeSort(Comparator.comparing(Person::getMail));
-
-                UserSorter mailSorterDecorator = new EvenOddSorterDecorator(
-                        mailSorter,
-                        person -> person.getMail() != null
-                                && person.getMail().length() % 2 == 0
-                );
-
-                SorterSelection sorterSelection =
-                        new SorterSelection(
-                                nameSorter,
-                                passwordSorter,
-                                mailSorter,
-                                nameSorterDecorator,
-                                passwordSorterDecorator,
-                                mailSorterDecorator
-                        );
+                SorterSelection sorterSelection = new SorterSelection();
 
                 SearchService searchService = new SearchService();
 
