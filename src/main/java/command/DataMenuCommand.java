@@ -58,6 +58,7 @@ public class DataMenuCommand extends Command {
             return MenuType.MAIN_MENU;
         } catch (RuntimeException e) {
             view.showMessage("File error: " + e.getMessage());
+            waitForEnter();
             return MenuType.FILL_MENU;
         }
     }
