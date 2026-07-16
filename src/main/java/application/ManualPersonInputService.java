@@ -44,15 +44,19 @@ public class ManualPersonInputService implements PersonInputService {
                 continue;
             }
 
-            Person person = new Person.Builder()
+            try {
+                Person person = new Person.Builder()
                     .setName(name)
                     .setMail(mail)
                     .setPassword(password)
                     .build();
 
-            dataBase.add(person);
+                dataBase.add(person);
 
-            view.showMessage("Added: " + person);
+                view.showMessage("Added: " + person);
+            } catch (IllegalStateException e) {
+                view.showMessage("Incorrect input! " + e.getMessage());
+            }
 
             if (!confirmContinue()) {
                 break;
@@ -62,18 +66,18 @@ public class ManualPersonInputService implements PersonInputService {
 
     private boolean confirmContinue() {
         while (true) {
-            view.showMessage("Add another entry? (y/n): ");
+            view.showMessage("Add another entry? (1/0): ");
             String answer = userInput.getInput();
 
-            if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
+            if (answer.equalsIgnoreCase("1")) {
                 return true;
             }
 
-            if (answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no") || answer.isEmpty()) {
+            if (answer.equalsIgnoreCase("0") || answer.isEmpty()) {
                 return false;
             }
 
-            view.showMessage("Enter 'y' to continue and 'n' to exit: ");
+            view.showMessage("Enter '1' to continue and '0' to exit: ");
         }
     }
 }
